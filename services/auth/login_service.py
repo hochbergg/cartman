@@ -130,7 +130,7 @@ class LoginService:
     optional enforcement of it being active.
     """
     # Check if the Login is actually authenticated.
-    if not login.is_authenticated():
+    if not login or not login.is_authenticated():
       return False
 
     # Verify that the role has the correct permissions.
