@@ -63,6 +63,16 @@ class UserController(Blueprint):
 
     return {"msg": "OK"}
 
+  def submitFoundCart(self, cart_id):
+    """
+    Submits found cart by current User.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+    return {"msg": "OK"}
+
+
 
   def getUserInfo(self):
     """
@@ -154,9 +164,10 @@ def return_cart():
   return jsonify(**res)
 
 
-@ctrl.route("/api/user/submit_found_cart/")
+@ctrl.route("/api/user/submit_found_cart/", methods=["POST"])
 def submit_found_cart():
-  pass
+  res = ctrl.submitFoundCart(request.get_json().get("cart_id"))
+  return jsonify(**res)
 
 
 # Old controller API paths
