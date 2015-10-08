@@ -7,9 +7,6 @@ from mongoengine import Q
 from models.login import Login
 from models.user import User
 from models.cart import Cart
-from models.user_session import UserSession
-from models.user_session_configuration import UserSessionConfiguration
-from models.game_session import GameSession
 from services.auth.decorators import authorized_for, update_login_access
 from services.auth.login_service import login_service
 
@@ -23,22 +20,48 @@ class UserController(Blueprint):
   """
 
   def takeCart(self, cart_id):
+    """
+    Assigns given cart to current User.
+    """
     user = g.user
     if not user:
       return {"err": "User not found", "code": 1}
 
     if user.cart:
-      return {"err": "User already has cart", "code": 2}
+      return {"err": "User already has a cart", "code": 2}
 
     cart = self._fetchCart(cart_id)
     if not cart:
-      return {"err": "Cart not in inventory", "code": 3}
+      return {"err": ("Cart '%s' not recognized", cart_id), "code": 3}
+
     user.cart = cart
     user.save()
+    cart.user = user
+    cart.save()
+
     return {"msg": "OK"}
 
   def returnCart(self, cart_id):
-    pass
+    """
+    Unassigns given cart from current User.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+
+    if user.cart.cart_id != cart_id:
+      return {"err": ("Cart '%s' isn't assigned to user '%s", cart_id, g.user.user_id), 2}
+
+    cart = self._fetchCart(cart_id)
+    if not cart:
+      return {"err": ("Cart '%s' not recognized", cart_id), "code": 3}
+
+    user.cart = None
+    user.save()
+    cart.user = None
+    cart.save()
+
+    return {"msg": "OK"}
 
 
   def getUserInfo(self):
