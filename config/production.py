@@ -2,8 +2,7 @@ import os
 
 # Database settings.
 MONGODB_SETTINGS = {
-  "host": os.environ.get("MONGOLAB_URI", "localhost"),
-  "db": os.environ.get("MONGOLAB_DB_NAME", "cartman"),
+  "db": os.environ.get("MONGOLAB_URI", "localhost"),
 }
 
 # Web URL settings.
