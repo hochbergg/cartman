@@ -21,8 +21,6 @@ ctrl = AdminController("admin", __name__, static_folder=os.path.join(os.getcwd()
 
 @ctrl.route("/admin/log/data/")
 def activity_log():
-    event = Event(name='bla')
-    event.save()
     events = Event.objects(creation_time__gte=datetime.now() - timedelta(**{TIME_UNIT: TIME_MEASUREMENT}))
     return jsonify(title='events from the last {} {}'.format(TIME_MEASUREMENT, TIME_UNIT),
                    msg=[event.toMinimalJson() for event in events])
