@@ -59,7 +59,7 @@ def seed_carts():
   Cart.drop_collection()
 
   for i in range(10):
-    cart = Cart()
+    cart = Cart(cart_id=("C00000000000000%s" % i))
     cart.save()
 
 def seed_all():
