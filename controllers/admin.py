@@ -1,8 +1,12 @@
 import os
-from flask import Blueprint, current_app, g, redirect, abort, jsonify, send_from_directory
+from datetime import datetime, timedelta
+
+from flask import Blueprint, current_app, g, redirect, abort, jsonify, send_from_directory, request
+
 from models.event import Event
 from models.cart import Cart
-from datetime import datetime, timedelta
+
+from controllers.user import UserController
 
 TIME_UNIT = 'minutes'
 TIME_MEASUREMENT = 4
@@ -47,3 +51,9 @@ def current_state_of_carts():
     carts = Cart.objects()
     return jsonify(title='As of {}'.format(datetime.now()), msg=[cart.toMinimalJson() for cart in carts])
 
+
+@ctrl.route('/admin/change-status/', methods=['POST'])
+def change_cart_status():
+    request_data = request.get_json()
+    # returnCart(cart_id=request_data.get('cartId'))
+    return jsonify(msg='success')
