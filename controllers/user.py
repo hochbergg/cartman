@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request, g, abort
 from mongoengine import Q
 from models.login import Login
 from models.user import User
+from models.cart import Cart
 from models.user_session import UserSession
 from models.user_session_configuration import UserSessionConfiguration
 from models.game_session import GameSession
@@ -20,6 +21,26 @@ class UserController(Blueprint):
   The get* methods are for returning data for the corresponding API calls.
   the _fetch* methods are for fetching data from the database.
   """
+
+  def takeCart(self, cart_id):
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+
+    if user.cart:
+      return {"err": "User already has cart", "code": 2}
+
+    cart = self._fetchCart(cart_id)
+    if not cart:
+      return {"err": "Cart not in inventory", "code": 3}
+    user.cart = cart
+    user.save()
+    return {"msg": "OK"}
+
+  def returnCart(self, cart_id):
+    pass
+
+
   def getUserInfo(self):
     """
     Returns the User info for the currently logged in User.
@@ -66,9 +87,9 @@ class UserController(Blueprint):
 
     return game_session.game.location
 
-  def _fetchUser(self, user_id):
+  def _fetchCart(self, cart_id):
     try:
-      return User.objects(user_id=user_id).get()
+      return Cart.objects(cart_id=cart_id).get()
     except:
       return None
 
@@ -97,13 +118,25 @@ class UserController(Blueprint):
 # Create and initialize the controller for serving the app files.
 ctrl = UserController("user", __name__, static_folder="../public")
 
-# Signal handlers.
-@login_service.new_session.connect_via(login_service)
-def handle_new_session(login_service, login, role, **extras):
-  if role == Login.Role.USER:
-    ctrl.startNewUserSession(login.user)
-
 # User API paths.
+
+@ctrl.route("/api/user/take_cart/", methods=["POST"])
+def take_cart():
+  res = ctrl.takeCart(request.get_json().get("cart_id"))
+  return jsonify(**res)
+
+@ctrl.route("/api/user/return_cart/", methods=["POST"])
+def return_cart():
+  res = ctrl.returnCart(request.get_json().get("cart_id"))
+  return jsonify(**res)
+
+
+@ctrl.route("/api/user/submit_found_cart/")
+def submit_found_cart():
+  pass
+
+
+# Old controller API paths
 @ctrl.route("/api/user/info/")
 @authorized_for(role=Login.Role.USER)
 @update_login_access

@@ -4,7 +4,6 @@ from mongoengine import *
 from event import Event
 from game import Game
 from game_session_configuration import GameSessionConfiguration
-from interruption import Interruption
 from symptom import Symptom
 from lib.id_generator import randomIdGenerator
 
@@ -25,9 +24,8 @@ class GameSession(Document):
 
   events = ListField(ReferenceField(Event))
   symptoms = ListField(ReferenceField(Symptom))
-  interruptions = ListField(ReferenceField(Interruption))
 
-  next_interruptions = ListField(ReferenceField(Interruption))
+
 
   running = BooleanField(default=True)
 
@@ -47,9 +45,6 @@ class GameSession(Document):
     json.update({
         "events": [e.toMinimalJson() for e in self.events],
         "symptoms": [s.toMinimalJson() for s in self.symptoms],
-        "interruptions": [i.toMinimalJson() for i in self.interruptions],
-        "nextInterruptions": [i.toMinimalJson()
-                              for i in self.next_interruptions],
     })
     return json
 
