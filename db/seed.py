@@ -55,9 +55,17 @@ def seed_users():
     user3.login.user = user3
     user3.login.save()
 
+def seed_carts():
+  Cart.drop_collection()
+
+  for i in range(10):
+    cart = Cart()
+    cart.save()
+
 def seed_all():
   print "Seeding DB..."
   seed_users()
+  seed_carts()
   print "Done."
 
 
