@@ -26,7 +26,6 @@ app.register_blueprint(admin_ctrl)
 def hello():
     return json.jsonify(msg='hello world!')
 
-
 if __name__ == "__main__":
   # Run the app.
   app.run()

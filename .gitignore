@@ -23,6 +23,7 @@ var/
 .installed.cfg
 *.egg
 .idea/
+.venv/
 
 Jeroboam6L8/.gradle/
 Jeroboam6L8/.idea/

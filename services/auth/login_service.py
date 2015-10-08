@@ -72,8 +72,6 @@ class LoginService:
 
     # Save the User credentials in the databae.
     user_login.password_hash = pass_hash
-    user_login.active = True
-    user_login.activation_time = datetime.datetime.now()
     user_login.urole = int(Login.Role.USER)
     user_login.save()
 
@@ -113,6 +111,7 @@ class LoginService:
 
   def loadLoginFromRequest(self, request):
     """
+    Loads the login credentials from the access_token field in the request JSON.
     """
     json = request.get_json(force=True, silent=True)
     if not json:
@@ -122,7 +121,7 @@ class LoginService:
     if not token_data:
       return None
 
-    return self.loadLoginFromID(token_data)
+    return self.loadLoginFromToken(token_data)
 
   def isLoginAuthorizedFor(self, login, role):
     """
@@ -130,7 +129,7 @@ class LoginService:
     optional enforcement of it being active.
     """
     # Check if the Login is actually authenticated.
-    if not login.is_authenticated():
+    if not login or not login.is_authenticated():
       return False
 
     # Verify that the role has the correct permissions.
@@ -172,7 +171,7 @@ class LoginService:
     """
     Validates the given password for the given login.
     """
-    return (login and login.active and
+    return (login and
             self._isPasswordMatch(password, login.password_hash))
 
   def _isLoginValid(self, login):
