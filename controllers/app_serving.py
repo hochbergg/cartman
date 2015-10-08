@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, current_app, g, redirect, abort
+from flask import Blueprint, current_app, g, redirect, abort, jsonify
 
 from lib.no_cache_decorator import nocache
 from models.login import Login
@@ -23,6 +23,7 @@ def root():
 @nocache
 def auth_user_path():
   return ctrl.send_static_file(os.path.join("user_app", "auth.html"))
+  # return ctrl.send_static_file(os.path.join("user_app", "auth.html"))
 
 @ctrl.route("/auth/admin/")
 @nocache

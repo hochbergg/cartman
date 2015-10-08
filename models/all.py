@@ -2,7 +2,6 @@ from event import Event
 from game import Game
 from game_session import GameSession
 from game_session_configuration import GameSessionConfiguration
-from interruption import Interruption
 from login import Login
 from symptom import Symptom
 from user import User
