@@ -20,11 +20,6 @@ def seed_users():
   for i, user_domain in enumerate(["t", "r"]):
     # Nadir's User.
     user1 = User(user_id="U00000000001111" + str(i), active=True)
-    user1.personal_info = PersonalInfo(first_name="Nadir",
-                                       last_name="Izrael")
-    user1.contact_infos = [ContactInfo(name="Nadir Izrael",
-                                       email="nadir.izr@gmail.com",
-                                       phone_number="+972-54-9454091")]
     user1.login = Login(
             username=(user_domain + "nadir"),
             password_hash=login_service._getHashedPassword(user_domain + "nadir"),
@@ -37,11 +32,6 @@ def seed_users():
 
     # Ori's User.
     user2 = User(user_id="U00000000001112" + str(i), active=True)
-    user2.personal_info = PersonalInfo(first_name="Ori",
-                                       last_name="Birnboim")
-    user2.contact_infos = [ContactInfo(name="Ori Birnboim",
-                                       email="oribirnboim@me.com",
-                                       phone_number="+972-54-4682455")]
     user2.login = Login(
             username=(user_domain + "ori"),
             password_hash=login_service._getHashedPassword(user_domain + "ori"),
@@ -54,11 +44,6 @@ def seed_users():
 
     # Shaked's User.
     user3 = User(user_id="U00000000001113" + str(i), active=True)
-    user3.personal_info = PersonalInfo(first_name="Shaked",
-                                       last_name="Gitelman")
-    user3.contact_infos = [ContactInfo(name="Shaked Gitelman",
-                                       email="shaked.gitelman@gmail.com",
-                                       phone_number="+972-54-7449102")]
     user3.login = Login(
             username=(user_domain + "shaked"),
             password_hash=login_service._getHashedPassword(user_domain + "shaked"),
