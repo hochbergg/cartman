@@ -1,0 +1,90 @@
+@import "theme";
+
+@input-text-color: @pl-text-color;
+
+#signup-page {
+  background: @pl-bg-color;
+  width: 100%;
+  height: 500px;
+  padding-top: 50px;
+
+  color: @pl-text-color;
+
+  .signup-container {
+
+    .web-query-message {
+      font-size: large;
+      color: @pl-title-color;
+      font-family: 'Exo', sans-serif;
+      text-align: left;
+      border: 1px solid @pl-invoice-color;
+      padding: 20px;
+      border-radius: 1em;
+    }
+
+    .brand {
+      font-family: 'Exo', sans-serif;
+      font-size: xx-large;
+
+      .signup-title {
+        color: @pl-text-color;
+        font-weight: bold;
+        background-color: transparent;
+      }
+
+      .first-word {
+        color: @pl-logo-color-one;
+        font-weight: bold;
+        background-color: transparent;
+      }
+
+      .second-word {
+        color: @pl-logo-color-two !important;
+        font-weight: bold;
+        background-color: transparent;
+      }
+    }
+
+    .signup-form {
+      height: 150px;
+      width: 30%;
+
+      .alert-box {
+        font-family: 'Exo', sans-serif;
+
+        .isa_info {
+          color: #00529B;
+          background-color: #BDE5F8;
+        }
+        .isa_success {
+          color: #4F8A10;
+          background-color: #DFF2BF;
+        }
+        .isa_warning {
+          color: #9F6000;
+          background-color: #FEEFB3;
+        }
+        .isa_error {
+          color: #D8000C;
+          background-color: #FFBABA;
+        }
+        .alert {
+          opacity: .50;
+          -moz-opacity: .50;
+          filter: alpha(opacity=50);
+          background-color: rgba(255, 255, 255, 0.5);
+          font-size: small;
+        }
+      }
+    }
+  }
+}
+
+
+::-webkit-input-placeholder{
+   color: rgba(200, 200, 200, 0.6);
+}
+
+::-moz-input-placeholder{
+   color: rgba(200, 200, 200, 0.6);
+}
