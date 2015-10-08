@@ -20,36 +20,33 @@ def seed_users():
 
   for i, user_domain in enumerate(["t", "r"]):
     # Nadir's User.
-    user1 = User(user_id="U00000000001111" + str(i), active=True)
+    user1 = User(user_id="U00000000001111" + str(i))
     user1.login = Login(
             username=(user_domain + "nadir"),
             password_hash=login_service._getHashedPassword(user_domain + "nadir"),
-            urole=Login.Role.USER,
-            active=True)
+            urole=Login.Role.USER)
     user1.login.save()
     user1.save()
     user1.login.user = user1
     user1.login.save()
 
     # Ori's User.
-    user2 = User(user_id="U00000000001112" + str(i), active=True)
+    user2 = User(user_id="U00000000001112" + str(i))
     user2.login = Login(
             username=(user_domain + "ori"),
             password_hash=login_service._getHashedPassword(user_domain + "ori"),
-            urole=Login.Role.USER,
-            active=True)
+            urole=Login.Role.USER)
     user2.login.save()
     user2.save()
     user2.login.user = user2
     user2.login.save()
 
     # Shaked's User.
-    user3 = User(user_id="U00000000001113" + str(i), active=True)
+    user3 = User(user_id="U00000000001113" + str(i))
     user3.login = Login(
             username=(user_domain + "shaked"),
             password_hash=login_service._getHashedPassword(user_domain + "shaked"),
-            urole=Login.Role.USER,
-            active=True)
+            urole=Login.Role.USER)
     user3.login.save()
     user3.save()
     user3.login.user = user3
@@ -59,12 +56,11 @@ def seed_admins():
   Admin.drop_collection()
 
   # Our Admin.
-  user1 = Admin(admin_id="ADMIN00000000001", active=True)
+  user1 = Admin(admin_id="ADMIN00000000001")
   user1.login = Login(
           username="admin",
           password_hash=login_service._getHashedPassword("Password1"),
-          urole=Login.Role.ADMIN,
-          active=True)
+          urole=Login.Role.ADMIN)
   user1.login.save()
   user1.save()
   user1.login.user = user1
