@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ShakedDevGmailCom.Jeroboam6L8" >
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    ​
+    <permission android:name="android.permission.BLUETOOTH" android:label="BLUETOOTH" />
+    <permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".MyApplication"
@@ -14,16 +19,10 @@
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".MonitoringActivity" >
-        </activity>
-        <activity
-            android:name=".RangingActivity"
-            android:label="@string/title_activity_ranging"
-            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 
