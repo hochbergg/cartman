@@ -3,7 +3,7 @@ from flask import Blueprint, current_app, g, redirect, abort, jsonify, send_from
 from models.event import Event
 from datetime import datetime, timedelta
 
-TIME_UNIT = 'seconds'
+TIME_UNIT = 'minutes'
 TIME_MEASUREMENT = 4
 
 
@@ -14,7 +14,7 @@ class AdminController(Blueprint):
 ctrl = AdminController("admin", __name__, static_folder=os.path.join(os.getcwd(), "public"))
 
 
-@ctrl.route("/admin/log/")
+@ctrl.route("/admin/log/data/")
 def activity_log():
     event = Event(name='bla')
     event.save()
@@ -25,10 +25,13 @@ def activity_log():
 
 @ctrl.route('/admin/')
 def admin_base():
-    print os.getcwd()
-    print ctrl.static_folder
     file_path_directory = os.path.join(ctrl.static_folder, "admin")
     return send_from_directory(file_path_directory, 'admin_base.html')
+
+@ctrl.route('/admin/log/')
+def admin_log_view():
+    file_path_directory = os.path.join(ctrl.static_folder, "admin")
+    return send_from_directory(file_path_directory, 'admin_log.html')
 
 
 @ctrl.route("/admin/current-state/")

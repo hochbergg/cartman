@@ -16,10 +16,29 @@
     <!-- Latest compiled and minified JavaScript -->
 </head>
 <body>
-<h1>Log of Events</h1>
+
+<div class="container">
+    <h1>Log of Events</h1>
+    <h3 id="log-title"></h3>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>ID</th>
+            <th>User</th>
+            <th>Cart</th>
+            <th>Event</th>
+        </tr>
+        </thead>
+        <tbody id="log-table">
+
+        </tbody>
+    </table>
+</div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="/public/admin/scripts/admin_log.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
