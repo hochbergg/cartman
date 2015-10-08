@@ -12,6 +12,12 @@ from models.game_session import GameSession
 from services.auth.decorators import authorized_for, update_login_access
 from services.auth.login_service import login_service
 
+"""
+/api/user/take_cart
+/api/user/return_cart
+"""
+
+
 
 class UserController(Blueprint):
   """
