@@ -147,23 +147,6 @@ class LoginService:
       print "ERROR: LoginService.loadToken failed to load Login: %s" % e
       return None
 
-    # If there is a timeout for the given Role (or a global one), verify we did
-    # not exceed it.
-    role = login.get_role()
-    role_settings = self.role_settings.get(role, {})
-    cookie_timeout = role_settings.get("COOKIE_TIMEOUT")
-    if cookie_timeout is not None:
-      try:
-        (username, password_hash) = token_service.loadToken(
-            token_data, timeout=cookie_timeout)
-      except:
-        print "ERROR: LoginService.loadLogin token over COOKIE_TIMEOUT: %s" % e
-        return None
-
-    # Check if the Login is valid under the various timeout conditions.
-    if not self._isLoginValid(login):
-      return None
-    
     return login
 
   def isLoginAuthorizedFor(self, login, role, active=Login.ActiveLevel.ACTIVE):
@@ -173,19 +156,6 @@ class LoginService:
     """
     # Check if the Login is actually authenticated.
     if not login.is_authenticated():
-      return False
-    
-    # Check if the Login is not active, and active check is enforced.
-    # Check if the login activation level is equal to or exceeds the required
-    # activation level.
-    if int(login.get_active_level()) < int(active):
-      return False
-
-    # Verify that the role has the correct permissions.
-    login_role = login.get_role()
-    if (login_role != role and
-        role != Login.Role.ANY and
-        login_role != Login.Role.ADMIN):
       return False
 
     return True
