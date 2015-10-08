@@ -7,6 +7,8 @@ from models.event import Event
 from models.cart import Cart
 
 from controllers.user import UserController
+from models.login import Login
+from services.auth.decorators import authorized_for
 
 TIME_UNIT = 'minutes'
 TIME_MEASUREMENT = 4
