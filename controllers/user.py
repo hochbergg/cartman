@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint, jsonify, request, g
 
 from models.login import Login
@@ -11,6 +12,14 @@ class UserController(Blueprint):
 
   the _fetch* methods are for fetching data from the database.
   """
+  def register(self, app, options, first_registration=False):
+    """
+    Called when Blueprint is registered with the app on load.
+    """
+    self.max_renting_duration = app.config.get("MAX_RENTING_DURATION")
+
+    super(UserController,
+          self).register(app, options, first_registration)
 
   def takeCart(self, cart_id):
     """
@@ -29,7 +38,10 @@ class UserController(Blueprint):
 
     user.cart = cart
     user.save()
-    cart.user = user
+    cart.renting_user = user
+    cart.renting_time = datetime.datetime.now()
+    cart.max_renting_time = ((cart.renting_time + self.max_renting_duration)
+                             if self.max_renting_duration else None)
     cart.save()
 
     return {"msg": "OK"}
@@ -51,7 +63,9 @@ class UserController(Blueprint):
 
     user.cart = None
     user.save()
-    cart.user = None
+    cart.renting_user = None
+    cart.renting_time = None
+    cart.max_renting_time = None
     cart.save()
 
     return {"msg": "OK"}

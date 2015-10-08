@@ -22,3 +22,6 @@ TOKEN_ROLE_SETTINGS = {
     "SESSION_TIMEOUT": 30*60,  # 30 minutes.
   },
 }
+
+# Cart renting settings.
+MAX_RENTING_DURATION = 60  # 60 seconds.

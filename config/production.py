@@ -29,3 +29,6 @@ TOKEN_ROLE_SETTINGS = {
     "COOKIE_TIMEOUT": 24*60*60,  # 1 day.
   },
 }
+
+# Cart renting settings.
+MAX_RENTING_DURATION = 60*60*6  # 6 hours.
