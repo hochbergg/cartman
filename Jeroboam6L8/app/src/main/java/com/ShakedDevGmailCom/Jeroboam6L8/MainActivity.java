@@ -11,20 +11,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private IntentFilter intentFilter;
-    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String BeaconName = intent.getStringExtra("Beacon Name");
-            addText(BeaconName);
-        }
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        intentFilter = new IntentFilter("com.hmkcode.android.USER_ACTION");
+
     }
 
     @Override
@@ -53,19 +46,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(myReceiver , intentFilter);
     }
 
     @Override
     protected void onPause() {
-        unregisterReceiver(myReceiver);
         super.onPause();
-    }
-
-    private void addText(String newText) {
-        TextView theView = (TextView) findViewById(R.id.textView1);
-        String oldText = theView.getText().toString();
-        theView.setText(oldText + "\n" + newText);
-//        theView.setText(newText);
     }
 }
