@@ -16,15 +16,15 @@ class Event(Document):
   name = StringField(required=True)
   data = DictField()
 
-  game_session = GenericReferenceField(required=True)
+  # game_session = GenericReferenceField(required=True)
 
   def toMinimalJson(self):
     obj = self.to_mongo()
     return {
         "eventId": str(self.event_id),
         "name": str(self.name),
-        "gameSessionId": (str(obj["game_session"]["_ref"].id)
-                          if "game_session" in obj else None),
+        # "gameSessionId": (str(obj["game_session"]["_ref"].id)
+        #                   if "game_session" in obj else None),
       }
 
   def toFullJson(self):
