@@ -11,33 +11,21 @@ from services.auth.login_service import login_service
 from controllers.auth import ctrl as auth_api_ctrl
 from controllers.user import ctrl as user_api_ctrl
 from controllers.admin import ctrl as admin_ctrl
-from controllers.static_serving import ctrl as static_serving_ctrl
-from controllers.app_serving import ctrl as app_serving_ctrl
 
-# # Create and initialize the app.
+# Create and initialize the app.
 app = Flask(__name__, static_folder="public")
-
-
 db = MongoEngine()
 configure_app(app, db, login_service)
 
 # Register all controllers.
 app.register_blueprint(auth_api_ctrl)
 app.register_blueprint(user_api_ctrl)
-app.register_blueprint(app_serving_ctrl)
-if app.config.get("DEBUG", False):
-  app.register_blueprint(static_serving_ctrl)
-app.register_blueprint(app_serving_ctrl)
 app.register_blueprint(admin_ctrl)
 
 @app.route('/')
 def hello():
     return json.jsonify(msg='hello world!')
 
-# @app.route('/admin/')
-# def admin():
-#     return 'this is admin page'
-
 if __name__ == "__main__":
-    # Run the app.
-    app.run()
+  # Run the app.
+  app.run()

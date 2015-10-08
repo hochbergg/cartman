@@ -1,0 +1,21 @@
+<div data-bind="with: gameModel">
+  <div class="row">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-0"></div>
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+      <br>
+      <div class="row">
+        <span class="pull-left">Please first read the game instructions.</span>
+      </div>
+      <div class="row">
+        <span class="pull-left">When you good to go press 'Begin'.</span>
+      </div>
+      <br>
+      <div class="row">
+        <iframe id="game-iframe" src="/api/user/games/trivia_game/" title="Game Frame"
+                 width="1000" height="800" frameborder="0"
+                 style="margin-top: 0px; margin-bottom: 0px; width:1000px; height:800px;">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>

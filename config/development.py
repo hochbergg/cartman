@@ -2,7 +2,7 @@ DEBUG = True
 
 # Database settings.
 MONGODB_SETTINGS = {
-  "db": "robofeuerstein",
+  "db": "cartman",
   "host": "localhost",
   "port": 27017,
 }
@@ -13,7 +13,7 @@ WEB_FULL_DOMAIN = "http://localhost/"
 
 # User authentication settings.
 SECRET_KEY = "I'M A SECRET KEY! REALLY!!"
-REMEMBER_COOKIE_NAME = "robofeuerstein"
+REMEMBER_COOKIE_NAME = "cartman"
 REMEMBER_COOKIE_DOMAIN = "." + WEB_SHORT_DOMAIN
 TOKEN_TIMEOUT = 30*24*60*60  # 1 month.
 TOKEN_ROLE_SETTINGS = {
@@ -22,3 +22,6 @@ TOKEN_ROLE_SETTINGS = {
     "SESSION_TIMEOUT": 30*60,  # 30 minutes.
   },
 }
+
+# Cart renting settings.
+MAX_RENTING_DURATION = 60  # 60 seconds.

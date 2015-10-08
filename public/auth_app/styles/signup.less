@@ -1,0 +1,241 @@
+@import url("https://fonts.googleapis.com/css?family=Exo:100,200,400");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300");
+
+body{
+	margin: 0;
+	padding: 0;
+	background: #fff;
+
+	color: #fff;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.body{
+	position: absolute;
+	top: -20px;
+	left: -20px;
+	right: -40px;
+	bottom: -40px;
+	width: auto;
+	height: auto;
+	background-image: url("/common/images/bg/login8.jpg");
+	background-size: cover;
+	-webkit-filter: blur(5px);
+  filter: blur(5px);
+	z-index: 0;
+}
+
+.grad{
+	position: absolute;
+	top: -20px;
+	left: -20px;
+	right: -40px;
+	bottom: -40px;
+	width: auto;
+	height: auto;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.8))); /* Chrome,Safari4+ */
+  background: -moz-linear-gradient(left top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); /* FF3.6+ */
+  background: -ms-linear-gradient(left top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); /* IE10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColor=rgba(0,0,0,0), endColor=rgba(0,0,0,0.8), GradientType=0); /* IE6-9 */
+	z-index: 1;
+	opacity: 0.7;
+}
+
+.header{
+	position: absolute;
+	top: calc(50% - 35px);
+	left: calc(50% - 255px);
+	z-index: 2;
+}
+
+.header div{
+	float: left;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 35px;
+	font-weight: 200;
+}
+
+/*.header div span{
+	color: #5379fa !important;
+  text-shadow: 0 1px 0 blue;
+}
+*/
+.signup{
+	position: absolute;
+	top: calc(50% - 75px);
+	left: calc(50% - 50px);
+	height: 150px;
+	width: 350px;
+	padding: 10px;
+	z-index: 2;
+}
+
+.signup input[type=text]{
+	width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+}
+
+.signup input[type=password]{
+	width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+	margin-top: 10px;
+}
+
+.signup input[type=submit]{
+	width: 260px;
+	height: 35px;
+	background: #fff;
+	border: 1px solid #fff;
+	cursor: pointer;
+	border-radius: 2px;
+	color: #a18d6c;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 6px;
+	margin-top: 10px;
+}
+
+.signup input[type=submit]:hover{
+	opacity: 0.8;
+}
+
+.signup input[type=submit]:active{
+	opacity: 0.6;
+}
+
+.signup input[type=text]:focus{
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.9);
+}
+
+.signup input[type=password]:focus{
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.9);
+}
+
+.signup input[type=submit]:focus{
+	outline: none;
+}
+
+.signup button{
+	width: 260px;
+	height: 35px;
+	background: #fff;
+	border: 1px solid #fff;
+	cursor: pointer;
+	border-radius: 2px;
+	color: #a18d6c;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 6px;
+	margin-top: 10px;
+}
+
+.signup button:hover{
+	opacity: 0.8;
+}
+
+.signup button:active{
+	opacity: 0.6;
+}
+
+.signup button:focus{
+	outline: none;
+}
+
+::-webkit-input-placeholder{
+   color: rgba(255,255,255,0.6);
+}
+
+::-moz-input-placeholder{
+   color: rgba(255,255,255,0.6);
+}
+
+.sound {
+    color: #4b3d49;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.mind {
+	color: #0e76a8 !important;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.signup .alert-box {
+  width: 400px;
+  z-index: 9999;
+}
+
+.signup .alert {
+  opacity:.50;
+  -moz-opacity:.50;
+  filter:alpha(opacity=50);
+  background-color:rgba(255,255,255,0.5);
+  font-size: small;
+}
+
+.signup .alert-box .isa_info, .isa_success, .isa_warning, .isa_error {
+    margin: 10px 0px;
+    padding:12px;
+    width: 235px;
+}
+
+.signup .alert-box .isa_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+.signup .alert-box .isa_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+.signup .alert-box .isa_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+.signup .alert-box .isa_error {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+
+.message {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.headline {
+    font: bold 34px "Century Schoolbook", Georgia, Times, serif;
+	color: #1c94c4;
+	line-height: 90%;
+	margin: .2em 0 .4em 0;
+	letter-spacing: 0px;
+}
+
+.sub-headline {
+    font: bold 22px "Century Schoolbook", Georgia, Times, serif;
+	color: #b5b9c4;
+	line-height: 90%;
+	margin: .2em 0 .4em 0;
+	letter-spacing: 0px;
+}

@@ -2,6 +2,7 @@ __author__ = 'shiriladelsky'
 
 import datetime
 
+from flufl.enum import Enum
 from mongoengine import *
 from lib.id_generator import randomIdGenerator
 
@@ -15,20 +16,31 @@ class Cart(Document):
 
   creation_time = DateTimeField(default=datetime.datetime.now)
 
-  user = GenericReferenceField()
+  renting_user = GenericReferenceField()
+  renting_time = DateTimeField()
+  max_renting_time = DateTimeField()
+
+  class Status(Enum):
+    CAGED = 0
+    RENTED = 1
+    STOLEN = 2
+  
+  def status(self):
+    if not self.renting_user:
+      return self.Status.CAGED
+    if self.max_renting_time and self.renting_time > self.max_renting_time:
+      return self.Status.STOLEN
+    return self.status.RENTED
 
   def toMinimalJson(self):
-    obj = self.to_mongo()
     return {
         "cartId": str(self.cart_id),
-        "userId": self.user.user_id if self.user else None
+        "userId": self.user.user_id if self.user else None,
+        "status": str(self.status().name),
       }
 
   def toFullJson(self):
     json = self.toMinimalJson()
-    json.update({
-        "data": self.configuration,
-    })
     return json
 
   def __str__(self):

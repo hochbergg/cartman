@@ -1,6 +1,5 @@
 from flask import g
 from flask.ext.mongoengine import MongoEngine, MongoEngineSessionInterface
-from flask.ext.login import current_user
 import os
 
 def configure_app(app, db, login_service):
@@ -20,9 +19,6 @@ def configure_app(app, db, login_service):
   # from our server into global g of flask.
   @app.before_request
   def before_request():
-    # Set up the Employee.
-    g.login = current_user
-
     # Copy over config details.
     g.secret_key = app.config["SECRET_KEY"]
 

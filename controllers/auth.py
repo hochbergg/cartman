@@ -29,7 +29,7 @@ class AuthController(Blueprint):
       login = g.login.toFullJson()
     return jsonify(info=login)
 
-  def handleLogin(self, username, password, next_url=""):
+  def handleLogin(self, username, password):
     """
     Handles the login process for the given username and password, rejecting or
     logging in the respective login model.
@@ -42,20 +42,11 @@ class AuthController(Blueprint):
 
     # Perform the login process itself.
     try:
-      login_obj = login_service.performLoginFromCredentials(username, password)
+      token_data = login_service.performLoginFromCredentials(username, password)
     except Exception, e:
       return jsonify(err="Incorrect username or password.")
 
-    # If this is an Admin login, redirect to the admin app.
-    if login_obj.get_role() == Login.Role.ADMIN:
-      return jsonify(next=(next_url or "/admin"))
-
-    # If this is a User login, redirect to the user app.
-    if login_obj.get_role() == Login.Role.USER:
-      return jsonify(next=(next_url or "/user"))
-
-    # If the role doesn't match anything, it can only be corruption.
-    abort(403)
+    return jsonify(access_token=token_data)
 
   def handleLogout(self, login_obj):
     """
@@ -96,9 +87,11 @@ ctrl = AuthController("authentication", __name__, static_folder="../public")
 
 @ctrl.route("/auth/login/", methods=["POST"])
 def auth_login():
-  return ctrl.handleLogin(request.form.get("username"),
-                          request.form.get("password"),
-                          next_url=request.values.get("next"))
+  json = request.get_json(force=True, silent=True)
+  if not json:
+    json = request.form
+  return ctrl.handleLogin(json.get("username"),
+                          json.get("password"))
 
 @ctrl.route("/auth/user/logout/",
             methods=["POST", "GET"])
