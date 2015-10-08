@@ -28,3 +28,10 @@ TOKEN_ROLE_SETTINGS = {
     "COOKIE_TIMEOUT": 24*60*60,  # 1 day.
   },
 }
+
+
+# PayPal Configuration - this is still SandBox
+
+PAYPAL_CLIENT_ID = 'AcfRZqmrrgJLrIemcJLSkBuSKEzDDgwEhgb-B29qi5irgm6hgXssH5-9V6M05vj2MBIHPASHDcRMHLNv'
+PAYPAL_SECRET = 'ELdGaLLdSrKvNC-OANdOYfJmwqSMfYQU1Tawh1DAdMka11qFJLQq4HEm9DjtIhTDRDgQ4EGWD_I1dFQD'
+PAYPAL_ENDPOINT = 'api.sandbox.paypal.com'
