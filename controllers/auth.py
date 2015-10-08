@@ -88,6 +88,8 @@ ctrl = AuthController("authentication", __name__, static_folder="../public")
 @ctrl.route("/auth/login/", methods=["POST"])
 def auth_login():
   json = request.get_json(force=True, silent=True)
+  if not json:
+    json = request.form
   return ctrl.handleLogin(json.get("username"),
                           json.get("password"))
 
