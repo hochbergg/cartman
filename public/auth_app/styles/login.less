@@ -1,0 +1,165 @@
+@import "theme";
+
+@input-text-color: @pl-text-color;
+
+#client-login-page {
+  background: @pl-bg-color;
+  width: 100%;
+  height: 500px;
+  padding-top: 50px;
+
+  color: @pl-text-color;
+
+  .client-login-container {
+
+    .brand {
+      font-family: 'Exo', sans-serif;
+      font-size: xx-large;
+
+      .first-word {
+        color: @pl-logo-color-one;
+        font-weight: bold;
+        background-color: transparent;
+      }
+
+      .second-word {
+        color: @pl-logo-color-two !important;
+        font-weight: bold;
+        background-color: transparent;
+      }
+    }
+
+    .client-login-form {
+      height: 150px;
+      width: 30%;
+
+      .alert-box {
+        font-family: 'Exo', sans-serif;
+
+        .isa_info {
+          color: #00529B;
+          background-color: #BDE5F8;
+        }
+        .isa_success {
+          color: #4F8A10;
+          background-color: #DFF2BF;
+        }
+        .isa_warning {
+          color: #9F6000;
+          background-color: #FEEFB3;
+        }
+        .isa_error {
+          color: #D8000C;
+          background-color: #FFBABA;
+        }
+        .alert {
+          opacity: .50;
+          -moz-opacity: .50;
+          filter: alpha(opacity=50);
+          background-color: rgba(255, 255, 255, 0.5);
+          font-size: small;
+        }
+      }
+
+      input[type=submit]:hover {
+        opacity: 0.8;
+      }
+
+      input[type=submit]:active {
+        opacity: 0.6;
+      }
+
+      input[type=text]:focus {
+        outline: none;
+        border: 1px solid rgba(163, 163, 163, 0.90);
+      }
+
+      input[type=password]:focus {
+        outline: none;
+        border: 1px solid rgba(163, 163, 163, 0.9);
+      }
+
+      input[type=submit]:focus {
+        outline: none;
+      }
+
+      input[type=text] {
+        width: 250px;
+        height: 30px;
+        background: transparent;
+        border: 1px solid rgba(200, 200, 200, 0.6);
+        border-radius: 2px;
+        color: @pl-text-color;
+        font-family: 'Exo', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        padding: 4px;
+      }
+
+      input[type=password] {
+        width: 250px;
+        height: 30px;
+        background: transparent;
+        border: 1px solid rgba(200, 200, 200, 0.6);
+        border-radius: 2px;
+        color: @pl-text-color;
+        font-family: 'Exo', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        padding: 4px;
+        margin-top: 10px;
+      }
+      input[type=submit] {
+        width: 260px;
+        height: 35px;
+        background: #fff;
+        border: 1px solid rgba(200, 200, 200, 0.6);
+        cursor: pointer;
+        border-radius: 2px;
+        color: @pl-text-color;
+        font-family: 'Exo', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        padding: 6px;
+        margin-top: 10px;
+      }
+
+      button {
+        width: 260px;
+        height: 35px;
+        background: @pl-bg-color;
+        border: 1px solid rgba(240, 240, 240, 0.6);
+        cursor: pointer;
+        border-radius: 0.5em;
+        color: @pl-logo-color-two;
+        font-family: 'Exo', sans-serif;
+        font-size: 16px;
+        font-weight: 800;
+        text-shadow: none;
+        padding: 6px;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      button:active {
+        opacity: 0.6;
+      }
+
+      button:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+
+::-webkit-input-placeholder{
+   color: rgba(200, 200, 200, 0.6);
+}
+
+::-moz-input-placeholder{
+   color: rgba(200, 200, 200, 0.6);
+}

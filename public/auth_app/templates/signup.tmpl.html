@@ -1,0 +1,66 @@
+<div id="signup-page" data-bind="with: signupModel">
+  <div class="row">
+    <div class="col-md-3 col-sm-2 col-xs-1"></div>
+    <div class="col-md-6 col-sm-6 col-xs-10">
+      <h2 class="text-primary">
+        <span><i class="fa fa-gamepad"></i> Feuerstein Play</span>
+      </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-sm-2 col-xs-1"></div>
+    <div class="col-md-4 col-sm-6 col-xs-10">
+      <div class="login-form">
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control login-field"
+                   placeholder="What's your username?" id="login-name"
+                   data-bind="textInput: username, hasFocus: isUsernameFocus, attr: { value: username() }">
+            <label class="login-field-icon fui-user" for="login-name"></label>
+          </div>
+
+          <div class="form-group">
+            <input type="password" class="form-control login-field" placeholder="Password"
+                   id="login-pass" data-bind="textInput: password, hasFocus: isPasswordFocus">
+            <label class="login-field-icon fui-lock" for="login-pass"></label>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control login-field" placeholder="Re-enter Password"
+                   id="login-pass-rep" data-bind="textInput: passwordRepeat"/>
+            <label class="login-field-icon fui-lock" for="login-pass-rep"></label>
+          </div>
+          <div class="row form-group has-feedback">
+            <div class="col-md-6 col-xs-6 pull-right">
+              <button id="signup-btn" class="btn btn-primary btn-block btn-flat"
+                      data-bind="click: signup">Sign Up
+              </button>
+              <span class="login-link">Already a member? <a href="#login">Login</a></span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Alerts -->
+      <div class="alert-box">
+        <!-- Success Message -->
+        <!-- ko if: message -->
+        <br>
+
+        <div class="form-group has-success">
+                    <span class="form-control" data-bind="html: message" style="border: 0;">
+                    </span>
+        </div>
+
+        <!-- /ko -->
+        <!-- Error Message -->
+        <!-- ko if: error -->
+        <br>
+
+        <div class="form-group has-error">
+                    <span class="form-control" data-bind="html: error" style="border: 0;">
+                    </span>
+        </div>
+        <!-- /ko -->
+      </div>
+    </div>
+  </div>
+</div>
