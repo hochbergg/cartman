@@ -25,6 +25,7 @@
         <tr>
             <th>Cart</th>
             <th>Status</th>
+            <th>Associated User</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -40,4 +41,10 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
+
+<span id="action-buttons" style="display: none">
+    <button class="btn btn-danger btn-set-as" data-status="stolen">Set as Stolen</button>
+    <button class="btn btn-success btn-set-as" data-status="caged">Set as Caged</button>
+    <button class="btn btn-primary btn-set-as" data-status="in-use">Set as In Use</button>
+</span>
 </html>
