@@ -24,6 +24,7 @@ public class MyApplication extends Application {
     private static final String TAG = ".MyApplicationName";
 
     private BeaconManager beaconManager;
+    private BeaconManager rangeBeaconManager;
     BroadcastReceiver myReceiver;
     IntentFilter intentFilter;
 
@@ -42,6 +43,7 @@ public class MyApplication extends Application {
                 sendBroadcast(intent);
                 showNotification("Enter notification", msg);
             }
+
             @Override
             public void onExitedRegion(Region region) {
                 String msg = "Exited " + region.getIdentifier().toString();
@@ -62,6 +64,27 @@ public class MyApplication extends Application {
             }
         });
         beaconManager.setBackgroundScanPeriod(5,2);
+
+        rangeBeaconManager = new BeaconManager(getApplicationContext());
+        rangeBeaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+            @Override
+            public void onEnteredRegion(Region region, List<Beacon> list) {
+                Log.d(TAG, list.toString());
+            }
+
+            @Override
+            public void onExitedRegion(Region region) {
+                // could add an "exit" notification too if you want (-:
+            }
+        });
+        rangeBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+            @Override
+            public void onServiceReady() {
+                rangeBeaconManager.startMonitoring(new Region("monitored region",
+                        UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"), 22504, 48827));
+            }
+        });
+
     }
 
     public void showNotification(String title, String message) {
