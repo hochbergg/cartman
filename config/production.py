@@ -2,6 +2,7 @@ import os
 
 # Database settings.
 MONGODB_SETTINGS = {
+  "db":  os.environ.get("MONGOLAB_DB_NAME", "cartman"),
   "host": os.environ.get("MONGOLAB_URI", "localhost"),
 }
 
@@ -28,6 +29,9 @@ TOKEN_ROLE_SETTINGS = {
     "COOKIE_TIMEOUT": 24*60*60,  # 1 day.
   },
 }
+
+# Cart renting settings.
+MAX_RENTING_DURATION = 60*60*6  # 6 hours.
 
 
 # PayPal Configuration - this is still SandBox

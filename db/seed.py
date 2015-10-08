@@ -55,6 +55,21 @@ def seed_users():
     user3.login.user = user3
     user3.login.save()
 
+def seed_admins():
+  Admin.drop_collection()
+
+  # Our Admin.
+  user1 = Admin(admin_id="ADMIN00000000001", active=True)
+  user1.login = Login(
+          username="admin",
+          password_hash=login_service._getHashedPassword("Password1"),
+          urole=Login.Role.ADMIN,
+          active=True)
+  user1.login.save()
+  user1.save()
+  user1.login.user = user1
+  user1.login.save()
+
 def seed_carts():
   Cart.drop_collection()
 
@@ -65,6 +80,7 @@ def seed_carts():
 def seed_all():
   print "Seeding DB..."
   seed_users()
+  seed_admins()
   seed_carts()
   print "Done."
 

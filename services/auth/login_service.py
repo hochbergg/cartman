@@ -115,6 +115,8 @@ class LoginService:
     """
     json = request.get_json(force=True, silent=True)
     if not json:
+      json = request.values
+    if not json:
       return None
 
     token_data = json.get("access_token")

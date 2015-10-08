@@ -23,6 +23,9 @@ TOKEN_ROLE_SETTINGS = {
     },
 }
 
+# Cart renting settings.
+MAX_RENTING_DURATION = 60  # 60 seconds.
+
 
 # PayPal Configuration
 
