@@ -122,7 +122,7 @@ class LoginService:
     if not token_data:
       return None
 
-    return self.loadLoginFromID(token_data)
+    return self.loadLoginFromToken(token_data)
 
   def isLoginAuthorizedFor(self, login, role):
     """
