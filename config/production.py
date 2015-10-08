@@ -7,13 +7,13 @@ MONGODB_SETTINGS = {
 
 # Web URL settings.
 WEB_SHORT_DOMAIN = os.environ.get("WEB_SHORT_DOMAIN",
-                                  "robo-feuerstein.herokuapp.com")
+                                  "cartman-server.herokuapp.com")
 WEB_FULL_DOMAIN = os.environ.get("WEB_FULL_DOMAIN",
-                                 "https://robo-feuerstein.herokuapp.com/")
+                                 "https://cartman-server.herokuapp.com/")
 
 # User authentication settings.
 SECRET_KEY = os.environ.get("AUTH_SECRET_KEY", os.urandom(24))
-REMEMBER_COOKIE_NAME = "robofeuerstein"
+REMEMBER_COOKIE_NAME = "cartman"
 REMEMBER_COOKIE_DOMAIN = "." + WEB_SHORT_DOMAIN
 TOKEN_TIMEOUT = 30*24*60*60  # 1 month.
 TOKEN_ROLE_SETTINGS = {

@@ -1,12 +1,11 @@
 from flask import g, redirect, request
-from flask.ext.login import current_user
 from functools import wraps
 
 from models.login import Login
 from services.auth.login_service import login_service
 
 
-def authorized_for(role, enforce=True, active=Login.ActiveLevel.ACTIVE):
+def authorized_for(role, enforce=True):
   """
   A decorator that verifies that the wrapped routing function is authorized for
   the given Role.
@@ -19,25 +18,16 @@ def authorized_for(role, enforce=True, active=Login.ActiveLevel.ACTIVE):
   def wrapper(fn):
     @wraps(fn)
     def decorated_view(*args, **kwargs):
-      if (enforce and
-          not login_service.isLoginAuthorizedFor(current_user, role, active)):
-        return login_service.login_manager.unauthorized()
+      login = login_service.loadLoginFromRequest(request)
 
-      login_service.populateGlobalLoginDetails(current_user)
+      if (enforce and
+          not login_service.isLoginAuthorizedFor(login, role)):
+        return login_service.handleUnauthorized(request)
+
+      login_service.populateGlobalLoginDetails(login)
 
       return fn(*args, **kwargs)
 
     return decorated_view
 
   return wrapper
-
-def update_login_access(fn):
-  """
-  Decorator that updates the login access (currently only the timestamp).
-  """
-  @wraps(fn)
-  def decorated_view(*args, **kwargs):
-    login_service.updateLoginAccess(current_user)
-    return fn(*args, **kwargs)
-
-  return decorated_view
