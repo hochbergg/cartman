@@ -22,42 +22,13 @@ class LoginService:
   It allows different roles to have different token timeouts, both for active
   sessions and for global sessions.
   """
-  def __init__(self):
-    """
-    Initializes the LoginService with its internal LoginManager.
-    """
-    # Create the login manager we will use through the service.
-    self.login_manager = LoginManager()
-
-    # Initialize signals that wrap and adapt Flask-Login signals.
-    self.signal_namespace = Namespace()
-    self.new_session = self.signal_namespace.signal("new-session")
-
   def configure(self, app):
     """
     Configures the various timeouts and flags for each of the roles.
     """
-    # Import configuration parameters for tokens.
-    role_settings = app.config.get("TOKEN_ROLE_SETTINGS", {})
-    self.role_settings = { Login.Role(role): settings
-                           for (role, settings) in role_settings.items() }
-    self.use_subdomains = app.config.get("WEB_USE_SUBDOMAINS")
-
     # Initialize the token service used within.
     token_service.configure(app.config)
     
-    # Initialize the LoginManager.
-    self.login_manager.init_app(app)
-    self.login_manager.session_protection = "strong"
-
-    # Register for Flask-Login related signals.
-    @user_logged_in.connect_via(app)
-    @user_login_confirmed.connect_via(app)
-    def handle_user_logged_in(app, user=None, **extras):
-      login = user or g.login
-      role = login.get_role() if login else None
-      self.new_session.send(self, login=login, role=role, **extras)
-
   def performLoginFromCredentials(self, username, password):
     """
     Handles the login process for the given username and password, rejecting or
@@ -73,14 +44,8 @@ class LoginService:
     # Mark the Login as authenticated. 
     login.authenticated = True
     login.save()
-
-    # Log in the user in Flask-Login.
-    login_user(user=login, remember=True)
-
-    # Update the last access time.
-    self.updateLoginAccess(login)
     
-    return login
+    return token_service.generateToken(login)
 
   def performLogout(self, login):
     """
@@ -89,9 +54,6 @@ class LoginService:
     # Mark the Login as not authenticated.
     login.authenticated = False
     login.save()
-
-    # Log out the user in Flask-Login.
-    logout_user()
 
   def performUserSignup(self, username, password):
     """
@@ -106,7 +68,7 @@ class LoginService:
 
     user_login = Login(username=username)
     # Get the hash of the given password to store in the database.
-    pass_hash = login_service._getHashedPassword(str(password))
+    pass_hash = self._getHashedPassword(str(password))
 
     # Save the User credentials in the databae.
     user_login.password_hash = pass_hash
@@ -149,13 +111,33 @@ class LoginService:
 
     return login
 
-  def isLoginAuthorizedFor(self, login, role, active=Login.ActiveLevel.ACTIVE):
+  def loadLoginFromRequest(self, request):
+    """
+    """
+    json = request.get_json(force=True, silent=True)
+    if not json:
+      return None
+
+    token_data = json.get("access_token")
+    if not token_data:
+      return None
+
+    return self.loadLoginFromID(token_data)
+
+  def isLoginAuthorizedFor(self, login, role):
     """
     Returns True if the given Login is authorized for the given role and the
     optional enforcement of it being active.
     """
     # Check if the Login is actually authenticated.
     if not login.is_authenticated():
+      return False
+
+    # Verify that the role has the correct permissions.
+    login_role = login.get_role()
+    if (login_role != role and
+        role != Login.Role.ANY and
+        login_role != Login.Role.ADMIN):
       return False
 
     return True
@@ -171,16 +153,20 @@ class LoginService:
     g.user = login.user if g.login else None
     g.admin = login.admin if g.login else None
 
-  def updateLoginAccess(self, login):
-    """
-    Updates the last access time for the given Login instance.
-    This is important if session timeouts are needed, as this needs to be called
-    to indicate activity in the Login whenever an event that is considered to be
-    activity occurs.
-    """
-    if login.is_authenticated():
-      login.last_access_time = datetime.datetime.now()
-      login.save()
+  def handleUnauthorized(self, request):
+    # API requests are rejected with an error if not authorized.
+    if request.path.startswith("/api"):
+      abort(401)
+
+    # Redirect to the correct login according to the role.
+    if request.path.startswith("/admin"):
+      role = "admin"
+    elif request.path.startswith("/user"):
+      role = "user"
+    else:
+      # If we have no match, this is an invalid request.
+      abort(404)
+    return redirect("/auth/%s/#login?next=%s" % (role, request.path))
 
   def _isLoginPasswordMatch(self, login, password):
     """
@@ -192,22 +178,9 @@ class LoginService:
   def _isLoginValid(self, login):
     """
     Checks if the Login is valid.
-    Currently only session timeout is checked.
     """
     if not login:
       return False
-
-    # Get the specific role of the Login.
-    role = login.get_role()
-    role_settings = self.role_settings.get(role, {})
-
-    # Check the session timeout since last activity was registered.
-    session_timeout = role_settings.get("SESSION_TIMEOUT")
-    if session_timeout is not None and login.last_access_time is not None:
-      seconds_since_last_access = (datetime.datetime.now() -
-                                   login.last_access_time).total_seconds()
-      if seconds_since_last_access > session_timeout:
-        return False
 
     return True
 
@@ -254,36 +227,3 @@ class LoginService:
 
 # Initialize the singleton service itself.
 login_service = LoginService()
-
-@login_service.login_manager.token_loader
-def load_token(token):
-  return login_service.loadLoginFromToken(token)
-
-@login_service.login_manager.user_loader
-def load_login(login_id):
-  return login_service.loadLoginFromID(login_id)
-
-@login_service.login_manager.unauthorized_handler
-def unauthorized():
-  # API requests are rejected with an error if not authorized.
-  if request.path.startswith("/api"):
-    abort(401)
-
-  # If this is a User specific login, and the associated Login is not active,
-  # redirect to the signup page.
-  if (request.path.startswith("/auth/user") and
-      current_user and
-      not current_user.is_anonymous() and
-      not current_user.active):
-    return redirect("/auth/user/#signup?user=%s&next=%s" %
-                    (current_user.username, request.path))
-
-  # Redirect to the correct login according to the role.
-  if request.path.startswith("/admin"):
-    role = "admin"
-  elif request.path.startswith("/user"):
-    role = "user"
-  else:
-    # If we have no match, this is an invalid request.
-    abort(404)
-  return redirect("/auth/%s/#login?next=%s" % (role, request.path))
