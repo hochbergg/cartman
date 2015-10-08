@@ -24,6 +24,9 @@ var/
 *.egg
 .idea/
 
+Jeroboam6L8/.gradle/
+Jeroboam6L8/.idea/
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
