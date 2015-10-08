@@ -16,6 +16,7 @@ from models.all import *
 
 def seed_users():
   User.drop_collection()
+  Login.drop_collection()
 
   for i, user_domain in enumerate(["t", "r"]):
     # Nadir's User.

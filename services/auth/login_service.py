@@ -72,8 +72,6 @@ class LoginService:
 
     # Save the User credentials in the databae.
     user_login.password_hash = pass_hash
-    user_login.active = True
-    user_login.activation_time = datetime.datetime.now()
     user_login.urole = int(Login.Role.USER)
     user_login.save()
 
@@ -113,6 +111,7 @@ class LoginService:
 
   def loadLoginFromRequest(self, request):
     """
+    Loads the login credentials from the access_token field in the request JSON.
     """
     json = request.get_json(force=True, silent=True)
     if not json:
@@ -172,7 +171,7 @@ class LoginService:
     """
     Validates the given password for the given login.
     """
-    return (login and login.active and
+    return (login and
             self._isPasswordMatch(password, login.password_hash))
 
   def _isLoginValid(self, login):

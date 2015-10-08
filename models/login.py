@@ -15,11 +15,7 @@ class Login(Document, UserMixin):
                          default=randomIdGenerator("L"))
 
   username = StringField(unique=True, max_length=50)
-  password_hash = BinaryField(required=True)
-
-  needs_activation = BooleanField(default=True)
-  active = BooleanField(default=False)
-  activation_time = DateTimeField()
+  password_hash = StringField(required=True)
 
   user = GenericReferenceField()
   admin = GenericReferenceField()
@@ -33,23 +29,6 @@ class Login(Document, UserMixin):
     USER = 1
     ADMIN = 2
   urole = IntField(default=Role.ANY, choices=Role._enums.keys())
-
-  class ActiveLevel(Enum):
-    INACTIVE = 0
-    GUEST = 1
-    ACTIVE = 2
-
-  def get_active_level(self):
-    """Returns the activation level of this login."""
-    if self.active:
-      return self.ActiveLevel.ACTIVE
-    if not self.needs_activation:
-      return self.ActiveLevel.GUEST
-    return self.ActiveLevel.INACTIVE
-
-  def is_active(self):
-    """Returns if the user is active or not."""
-    return self.active
 
   def is_authenticated(self):
     """Return True if the user is authenticated."""
@@ -81,8 +60,6 @@ class Login(Document, UserMixin):
     json = self.toMinimalJson()
     json.update({
       "authenticated": str(self.authenticated),
-      "needsActivation": self.needs_activation,
-      "active": self.active,
     })
     return json
 
