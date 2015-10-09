@@ -1,6 +1,5 @@
 package com.ShakedDevGmailCom.Jeroboam6L8;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,16 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class RentingActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_renting);
 
     }
 
@@ -53,10 +51,5 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    public void navigateToChoose(View view) {
-        Intent intent = new Intent(this, ChooseCartActivity.class);
-        startActivity(intent);
     }
 }
