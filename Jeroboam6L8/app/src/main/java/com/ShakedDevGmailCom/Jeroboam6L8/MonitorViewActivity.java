@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,7 +26,10 @@ import java.util.UUID;
 
 public class MonitorViewActivity extends AppCompatActivity {
 
+    private static final String BASE_URL = "http://4f997bd2.ngrok.io/api/user/take_cart/";
+
     private static final Map<String, String> CARTS_BY_BEACONS;
+
     static {
         Map<String, String> cartsByBeacons = new HashMap<>();
         cartsByBeacons.put("15250:20387", "Shaked's Cart");
@@ -70,21 +74,35 @@ public class MonitorViewActivity extends AppCompatActivity {
             public void onBeaconsDiscovered(Region region, List<Beacon> list) {
 
                 if (!list.isEmpty()) {
-                    Log.d("Airport", "Nearest places: " + list);
-                    String detectedCarts = "";
+                    String cartsToViewStr = "";
+                    String cartsToURLStr = "";
+
                     for (Beacon beacon : list) {
                         String cartId = String.valueOf(beacon.getMajor()) + ":" + String.valueOf(beacon.getMinor());
                         if (CARTS_BY_BEACONS.get(cartId) != null) {
-                            detectedCarts += (CARTS_BY_BEACONS.get(cartId));
-                            detectedCarts += "\n";
+
+                            cartsToViewStr += (CARTS_BY_BEACONS.get(cartId)) + "\n";
+                            cartsToURLStr += cartId.replace(":","") + ",";
                         }
                     }
-                    if (detectedCarts.equals("")) {
-                        detectedCarts = "No Carts Detected In My Area.";
+                    if (cartsToURLStr.length() > 0) {
+                        cartsToURLStr = cartsToURLStr.substring(0, cartsToURLStr.length() - 2);
                     }
-                    setCarts(detectedCarts);
+                    if (cartsToViewStr.equals("")) {
+                        cartsToViewStr = "No Carts Detected In My Area.";
+                    }
+                    else {
+                        String urlMethod = "POST";
+                        Log.i("HERE", cartsToURLStr);
+                        RequestURL.send(BASE_URL, urlMethod, cartsToURLStr);
+                    }
+                    setCarts(cartsToViewStr);
                 } else {
                     setCarts("No Carts Detected In My Area.");
+                }
+
+                if (!list.isEmpty()) {
+
                 }
             }
         });

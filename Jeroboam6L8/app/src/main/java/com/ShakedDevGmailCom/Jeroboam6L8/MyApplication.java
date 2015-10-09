@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.StrictMode;
 import android.util.JsonReader;
 import android.util.Log;
@@ -50,12 +51,10 @@ public class MyApplication extends Application {
                 Log.i(TAG, msg);
                 Intent intent = new Intent("com.hmkcode.android.USER_ACTION");
                 intent.putExtra("Beacon Name", msg);
-                sendBroadcast(intent);
+//                sendBroadcast(intent);
                 showNotification("Enter notification", msg);
 
-                String urlStr = BASE_URL + "?cardList=1,2,3&beacon=";
-                String urlMethod = "GET";
-                RequestURL.send(urlStr, urlMethod);
+
             }
 
             @Override
@@ -64,13 +63,9 @@ public class MyApplication extends Application {
                 Log.i(TAG, msg);
                 Intent intent = new Intent("com.hmkcode.android.USER_ACTION");
                 intent.putExtra("Beacon Name", msg);
-                sendBroadcast(intent);
+//                sendBroadcast(intent);
                 showNotification("Exit notification", msg);
 
-                String urlStr = BASE_URL + "?beacon=";
-                String urlMethod = "POST";
-                Map<String, String> parameters = new HashMap<String, String>();
-                RequestURL.send(urlStr, urlMethod);
             }
         });
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
