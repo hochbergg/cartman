@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class MonitorViewActivity extends AppCompatActivity {
 
-    private static final String BASE_URL = "http://4f997bd2.ngrok.io/api/location/nearby_carts/";
+    private static final String BASE_URL = "http://f700f36c.ngrok.io/api/location/nearby_carts/";
 
     private static final Map<String, String> CARTS_BY_BEACONS;
 

@@ -21,6 +21,7 @@ class Login(Document, UserMixin):
   admin = GenericReferenceField()
 
   authenticated = BooleanField(default=False)
+  push_token = StringField()
 
   last_access_time = DateTimeField()
 

@@ -25,6 +25,8 @@ var/
 .idea/
 .venv/
 
+db/config/
+
 Jeroboam6L8/.gradle/
 Jeroboam6L8/.idea/
 
