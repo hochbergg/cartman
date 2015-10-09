@@ -30,7 +30,7 @@ public class RequestURL {
     private static final String URL_METHOD = "POST";
     private static String ACCESS_TOKEN;
 
-    public static String sendJSON(String path, String jsonToSend) {
+    public static JSONObject sendJSON(String path, String jsonToSend) {
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -42,6 +42,7 @@ public class RequestURL {
             urlConnection.setRequestProperty("Content-Type", "application/json");
             DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
             jsonToSend = jsonToSend.substring(0, jsonToSend.length() - 1);
+
             jsonToSend += ",\"access_token\":\"" + ACCESS_TOKEN + "\"}";
             Log.i("JSONNNN : ", jsonToSend);
             out.writeBytes(jsonToSend);
@@ -56,27 +57,28 @@ public class RequestURL {
             }
             input.close();
 
+
+
             //region Description
             JSONObject mainResponseObject = null;
             String responseMessage = null;
             try {
-                mainResponseObject = new JSONObject(response.toString());
-                responseMessage = mainResponseObject.getString("access_token");
+                return new JSONObject(response.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //endregion
 
+            return null;
 
 
-            return responseMessage;
 
 
         } catch (IOException e) {
             Log.i(TAG, "IO Exception");
         }
 
-        return "";
+        return null;
     }
 
     public static void setAccessToken(String newAccessToken) {

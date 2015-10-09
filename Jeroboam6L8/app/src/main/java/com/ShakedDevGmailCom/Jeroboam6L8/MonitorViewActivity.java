@@ -19,6 +19,9 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -60,11 +63,17 @@ public class MonitorViewActivity extends AppCompatActivity {
     };
 
     private void GetUiUpdates() {
-        String cartsJSON = "{},";
+        String cartsJSON = "{\"msg\":123}";
         String path = "/api/user/notifications/";
         Log.i("PATH", path);
-        String requestResponse = RequestURL.sendJSON(path, cartsJSON);
-        Log.i("RESPONSE", requestResponse);
+        JSONObject requestResponse = RequestURL.sendJSON(path, cartsJSON);
+        String responseText = "";
+        try {
+            responseText = requestResponse.getString("notifications").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("RESPONSE", responseText);
     }
 
     @Override
@@ -133,7 +142,13 @@ public class MonitorViewActivity extends AppCompatActivity {
 
         String loginPath = "/auth/login/";
         String loginJson = "{\"username\":\"tori\",\"password\":\"tori\"}";
-        String accessToken = RequestURL.sendJSON(loginPath, loginJson);
+        JSONObject jsonResponse = RequestURL.sendJSON(loginPath, loginJson);
+        String accessToken = null;
+        try {
+            accessToken = jsonResponse.getString("access_token");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Log.i("ACCESS_TOKEN", accessToken);
         RequestURL.setAccessToken(accessToken);
 

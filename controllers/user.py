@@ -88,7 +88,7 @@ class UserController(Blueprint):
       return {"err": "User not found", "code": 1}
     
     notifications = [dict(n) for n in user.notifications]
-    user.notifications.clear()
+    user.notifications = []
     user.save()
 
     return {"notifications": notifications}
