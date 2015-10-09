@@ -21,13 +21,16 @@ class UserController(Blueprint):
     super(UserController,
           self).register(app, options, first_registration)
 
-  def takeCart(self, cart_id):
+  def takeCart(self, cart_id, username):
     """
     Assigns given cart to current User.
     """
-    user = g.user
-    if not user:
-      return {"err": "User not found", "code": 1}
+    # user = g.user
+    # if not user:
+    #   return {"err": "User not found", "code": 1}
+
+    login = Login.objects(username=username).get()
+    user = login.user
 
     if user.cart:
       return {"err": "User already has a cart", "code": 2}
@@ -40,7 +43,7 @@ class UserController(Blueprint):
     user.save()
     cart.renting_user = user
     cart.renting_time = datetime.datetime.now()
-    cart.max_renting_time = ((cart.renting_time + self.max_renting_duration)
+    cart.max_renting_time = ((cart.renting_time + datetime.timedelta(hours=6))
                              if self.max_renting_duration else None)
     cart.save()
 
@@ -84,7 +87,7 @@ class UserController(Blueprint):
     Fetches cart by given ID.
     """
     try:
-      return Cart.objects(cart_id=cart_id).get()
+      return Cart.objects(cart_id=str(cart_id)).get()
     except:
       return None
 
@@ -97,7 +100,7 @@ ctrl = UserController("user", __name__, static_folder="../public")
 @ctrl.route("/api/user/take_cart/", methods=["POST"])
 @authorized_for(role=Login.Role.USER)
 def take_cart():
-  res = ctrl.takeCart(request.get_json().get("cart_id"))
+  res = ctrl.takeCart(request.get_json().get("cart_id"), "")
   return jsonify(**res)
 
 @ctrl.route("/api/user/return_cart/", methods=["POST"])

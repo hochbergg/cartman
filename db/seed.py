@@ -69,11 +69,17 @@ def seed_admins():
 def seed_carts():
   Cart.drop_collection()
 
-  for i in range(10):
-    cart = Cart(cart_id=("C00000000000000%s" % i))
-    cart.rental_state = cart.RentalState.WAITING
-    cart.enclosed = True
-    cart.save()
+  cart1 = Cart(cart_id="1525020387")
+  cart2 = Cart(cart_id="626245060")
+
+  cart1.rental_state = cart1.RentalState.WAITING
+  cart1.enclosed = True
+  cart1.save()
+
+  cart2.rental_state = cart2.RentalState.WAITING
+  cart2.enclosed = True
+  cart2.save()
+
 
 def seed_all():
   print "Seeding DB..."
