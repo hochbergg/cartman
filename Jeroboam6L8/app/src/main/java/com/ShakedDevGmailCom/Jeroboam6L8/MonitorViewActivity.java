@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,23 @@ public class MonitorViewActivity extends AppCompatActivity {
 
     private BeaconManager rangeBeaconManager;
     private Region region;
+    private final Handler handler = new Handler();
+
+
+    private Runnable updateShopStatus = new Runnable() {
+        public void run() {
+            GetUiUpdates();
+            handler.postDelayed(this, 5000); // 5 seconds
+        }
+    };
+
+    private void GetUiUpdates() {
+        String cartsJSON = "{},";
+        String path = "/api/user/notifications/";
+        Log.i("PATH", path);
+        String requestResponse = RequestURL.sendJSON(path, cartsJSON);
+        Log.i("RESPONSE", requestResponse);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +114,7 @@ public class MonitorViewActivity extends AppCompatActivity {
                     else {
                         String cartsJSON = "{\"cart_ids\":[" + cartsToURLStr + "]}";
                         Log.i("HERE. JSON:", cartsJSON);
-                        String path = "/api/location/nearby_carts";
+                        String path = "/api/location/nearby_carts/";
                         RequestURL.sendJSON(path, cartsJSON);
                     }
                     setCarts(cartsToViewStr);
@@ -132,6 +150,8 @@ public class MonitorViewActivity extends AppCompatActivity {
                 rangeBeaconManager.startRanging(region);
             }
         });
+        handler.removeCallbacks(updateShopStatus);
+        handler.postDelayed(updateShopStatus, 1000); // 1 second
     }
 
     @Override

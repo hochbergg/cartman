@@ -27,6 +27,11 @@ class User(Document):
 
     notifications = ListField(DictField())
 
+    def username(self):
+      if not self.login:
+        return None
+      return self.login.username
+
     def toMinimalJson(self):
         return {
             "userId": str(self.user_id),

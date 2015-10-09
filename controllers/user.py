@@ -21,16 +21,13 @@ class UserController(Blueprint):
     super(UserController,
           self).register(app, options, first_registration)
 
-  def takeCart(self, cart_id, username):
+  def takeCart(self, cart_id):
     """
     Assigns given cart to current User.
     """
-    # user = g.user
-    # if not user:
-    #   return {"err": "User not found", "code": 1}
-
-    login = Login.objects(username=username).get()
-    user = login.user
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
 
     if user.cart:
       return {"err": "User already has a cart", "code": 2}
@@ -46,6 +43,9 @@ class UserController(Blueprint):
     cart.max_renting_time = ((cart.renting_time + datetime.timedelta(hours=6))
                              if self.max_renting_duration else None)
     cart.save()
+
+    user.notifications.append({"name": "CART_TAKEN", "cart_id": cart.cart_id})
+    user.save()
 
     return {"msg": "OK"}
 
@@ -71,6 +71,9 @@ class UserController(Blueprint):
     cart.max_renting_time = None
     cart.save()
 
+    user.notifications.append({"name": "CART_RETURNED", "cart_id": cart.cart_id})
+    user.save()
+
     return {"msg": "OK"}
 
   def submitFoundCart(self, cart_id):
@@ -95,6 +98,19 @@ class UserController(Blueprint):
     user.save()
 
     return {"notifications": notifications}
+
+  def postPullNotification(self, notification):
+    """
+    Add a push notification to the User queue.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+
+    user.notifications.append(notification)
+    user.save()
+    
+    return { "msg": "OK" }
 
   def _fetchCart(self, cart_id):
     """
@@ -133,4 +149,10 @@ def submit_found_cart():
 @authorized_for(role=Login.Role.USER)
 def pull_notifications():
   res = ctrl.getPullNotifications()
+  return jsonify(**res)
+
+@ctrl.route("/api/user/push_notification/", methods=["POST"])
+@authorized_for(role=Login.Role.USER)
+def push_notifications():
+  res = ctrl.postPullNotification(request.get_json().get("notification"))
   return jsonify(**res)

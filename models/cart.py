@@ -12,6 +12,7 @@ class Cart(Document):
   cart_id = StringField(primary_key=True,
                          default=randomIdGenerator("C"))
 
+
   creation_time = DateTimeField(default=datetime.datetime.now)
 
   renting_user = GenericReferenceField()
@@ -31,7 +32,7 @@ class Cart(Document):
   def toMinimalJson(self):
     return {
         "cartId": str(self.cart_id),
-        "userId": self.user.user_id if self.user else None,
+        "userId": self.renting_user.user_id if self.renting_user else None,
         "status": str(self.RentalState(self.rental_state).name),
       }
 
