@@ -34,9 +34,6 @@ app.register_blueprint(user_api_ctrl)
 app.register_blueprint(admin_ctrl)
 app.register_blueprint(location_ctrl)
 
-@app.route('/')
-def hello():
-    return json.jsonify(msg='hello world!')
 
 if __name__ == "__main__":
   # Run the app.

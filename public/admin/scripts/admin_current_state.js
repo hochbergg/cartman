@@ -9,7 +9,8 @@ $(document).ready(function () {
         url: '/auth/login/',
         data: JSON.stringify({
             username: 'admin',
-            password: 'Password1'
+            password: 'Password1',
+            push_id: 'pushpushpush'
         }),
         type: 'POST',
         contentType: "application/json; charset=utf-8",
