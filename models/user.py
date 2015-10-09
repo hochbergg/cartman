@@ -25,6 +25,8 @@ class User(Document):
 
     enclosure = BooleanField(default=False)
 
+    notifications = ListField(DictField())
+
     def toMinimalJson(self):
         return {
             "userId": str(self.user_id),

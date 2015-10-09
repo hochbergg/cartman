@@ -79,6 +79,9 @@ class LocationController(Blueprint):
 
         print res_dict # TODO - push notification
 
+        user.notifications.append(res_dict)
+        user.save()
+
   def _handleComplementingCartsNearEnclosure(self, user, cart_ids):
     """
     Updates state of all carts other than given list, assuming given list is of carts within range of Enclosure.
@@ -119,6 +122,9 @@ class LocationController(Blueprint):
 
       print res_dict # TODO - push notification
 
+      user.notifications.append(res_dict)
+      user.save()
+
   def _handleCartsNearSentinel(self, user, cart_ids):
     """
     Updates state of given carts within range of Sentinel.
@@ -144,6 +150,9 @@ class LocationController(Blueprint):
         cart.save()
 
         print res_dict # TODO - push notification
+
+        user.notifications.append(res_dict)
+        user.save()
 
   def _fetchCart(self, cart_id):
     """
@@ -177,7 +186,7 @@ ctrl = LocationController("location", __name__, static_folder="../public")
 # User API paths.
 
 @ctrl.route("/api/location/nearby_carts/", methods=["POST"])
-# @authorized_for(role=Login.Role.USER)
+@authorized_for(role=Login.Role.USER)
 def nearby_carts():
   res = ctrl.nearbyCarts([cart["cart_id"] for cart in request.get_json().get("cart_ids")])
   res = ctrl.rssi(request.get_json().get("cart_ids"), user_ctrl)

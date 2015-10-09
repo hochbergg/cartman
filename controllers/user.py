@@ -82,6 +82,20 @@ class UserController(Blueprint):
       return {"err": "User not found", "code": 1}
     return {"msg": "OK"}
 
+  def getPullNotifications(self):
+    """
+    Fetches all of the notifications for the User, and clears them.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+    
+    notifications = [dict(n) for n in user.notifications]
+    user.notifications.clear()
+    user.save()
+
+    return {"notifications": notifications}
+
   def _fetchCart(self, cart_id):
     """
     Fetches cart by given ID.
@@ -113,4 +127,10 @@ def return_cart():
 @authorized_for(role=Login.Role.USER)
 def submit_found_cart():
   res = ctrl.submitFoundCart(request.get_json().get("cart_id"))
+  return jsonify(**res)
+
+@ctrl.route("/api/user/notifications/", methods=["POST"])
+@authorized_for(role=Login.Role.USER)
+def pull_notifications():
+  res = ctrl.getPullNotifications()
   return jsonify(**res)
