@@ -19,6 +19,9 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,14 +32,7 @@ public class MonitorViewActivity extends AppCompatActivity {
 
     private static final String BASE_URL = "http://f700f36c.ngrok.io/api/location/nearby_carts/";
 
-    private static final Map<String, String> CARTS_BY_BEACONS;
 
-    static {
-        Map<String, String> cartsByBeacons = new HashMap<>();
-        cartsByBeacons.put("15250:20387", "Shaked's Cart");
-        cartsByBeacons.put("62624:5060", "Agam's Cart");
-        CARTS_BY_BEACONS = Collections.unmodifiableMap(cartsByBeacons);
-    }
 
     private IntentFilter intentFilter;
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -47,25 +43,8 @@ public class MonitorViewActivity extends AppCompatActivity {
         }
     };
 
-    private BeaconManager rangeBeaconManager;
-    private Region region;
-    private final Handler handler = new Handler();
 
 
-    private Runnable updateShopStatus = new Runnable() {
-        public void run() {
-            GetUiUpdates();
-            handler.postDelayed(this, 5000); // 5 seconds
-        }
-    };
-
-    private void GetUiUpdates() {
-        String cartsJSON = "{},";
-        String path = "/api/user/notifications/";
-        Log.i("PATH", path);
-        String requestResponse = RequestURL.sendJSON(path, cartsJSON);
-        Log.i("RESPONSE", requestResponse);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,56 +65,12 @@ public class MonitorViewActivity extends AppCompatActivity {
 
         intentFilter = new IntentFilter("com.hmkcode.android.USER_ACTION");
 
-        rangeBeaconManager = new BeaconManager(this);
-        rangeBeaconManager.setRangingListener(new BeaconManager.RangingListener() {
-            @Override
-            public void onBeaconsDiscovered(Region region, List<Beacon> list) {
 
-                if (!list.isEmpty()) {
-                    String cartsToViewStr = "";
-                    String cartsToURLStr = "";
 
-                    for (Beacon beacon : list) {
-                        String cartId = String.valueOf(beacon.getMajor()) + ":" + String.valueOf(beacon.getMinor());
-                        if (CARTS_BY_BEACONS.get(cartId) != null) {
+//        region = new Region("ranged region",
+//                UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"), null, null);
 
-                            cartsToViewStr += (CARTS_BY_BEACONS.get(cartId)) + "\n";
-                            cartId = cartId.replace(":", "");
-                            String cartPowerStr = String.valueOf(beacon.getRssi());
-                            cartsToURLStr += "{\"cart_id\":" + cartId + ",\"power\":" + cartPowerStr + "},";
-                        }
-                    }
-                    if (cartsToURLStr.length() > 0) {
-                        cartsToURLStr = cartsToURLStr.substring(0, cartsToURLStr.length() - 1);
-                    }
-                    if (cartsToViewStr.equals("")) {
-                        cartsToViewStr = "No Carts Detected In My Area.";
-                    }
-                    else {
-                        String cartsJSON = "{\"cart_ids\":[" + cartsToURLStr + "]}";
-                        Log.i("HERE. JSON:", cartsJSON);
-                        String path = "/api/location/nearby_carts/";
-                        RequestURL.sendJSON(path, cartsJSON);
-                    }
-                    setCarts(cartsToViewStr);
-                } else {
-                    setCarts("No Carts Detected In My Area.");
-                }
 
-                if (!list.isEmpty()) {
-
-                }
-            }
-        });
-
-        region = new Region("ranged region",
-                UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"), null, null);
-
-        String loginPath = "/auth/login/";
-        String loginJson = "{\"username\":\"tori\",\"password\":\"tori\"}";
-        String accessToken = RequestURL.sendJSON(loginPath, loginJson);
-        Log.i("ACCESS_TOKEN", accessToken);
-        RequestURL.setAccessToken(accessToken);
 
 
     }
@@ -144,20 +79,15 @@ public class MonitorViewActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         registerReceiver(myReceiver, intentFilter);
-        rangeBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                rangeBeaconManager.startRanging(region);
-            }
-        });
-        handler.removeCallbacks(updateShopStatus);
-        handler.postDelayed(updateShopStatus, 1000); // 1 second
+//
+//        handler.removeCallbacks(updateShopStatus);
+//        handler.postDelayed(updateShopStatus, 1000); // 1 second
     }
 
     @Override
     protected void onPause() {
         unregisterReceiver(myReceiver);
-        rangeBeaconManager.stopRanging(region);
+//        rangeBeaconManager.stopRanging(region);
         super.onPause();
     }
 
@@ -167,9 +97,6 @@ public class MonitorViewActivity extends AppCompatActivity {
         theView.setText(oldText + "\n" + newText);
     }
 
-    private void setCarts(String newText) {
-        TextView theView = (TextView) findViewById(R.id.cartsList);
-        theView.setText(newText);
-    }
+
 
 }

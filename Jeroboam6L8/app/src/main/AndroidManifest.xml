@@ -38,6 +38,11 @@
             android:label="@string/app_name"
             android:noHistory="true"
             >
+            <intent-filter>
+                <action android:name="android.intent.action.LAUNCH_RENTING_ACTIVITY" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".DoneActivity"
