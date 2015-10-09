@@ -14,4 +14,7 @@
     <string name="screw_you_guys">screw you guys\ni\'m going home</string>
     <string name="done_title">All done!</string>
     <string name="done_description">Now that your shopping\nexperience is complete, we look\nforward to seeing you as part of\nour bounty program!</string>
+
+    <string name="stolen_title">You stole our cart!\nYou bastard!</string>
+    <string name="stolen_description">You failed to return the cart.\nIt is now considered stolen.\nWe have fined your account.\nI hope you feel good about yourself.</string>
 </resources>
