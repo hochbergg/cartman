@@ -31,7 +31,7 @@ class AuthController(Blueprint):
             login = g.login.toFullJson()
         return jsonify(info=login)
 
-    def handleLogin(self, username, password):
+    def handleLogin(self, username, password, push_id=None):
         """
         Handles the login process for the given username and password, rejecting or
         logging in the respective login model.

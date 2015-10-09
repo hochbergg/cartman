@@ -7,6 +7,8 @@ from models.cart import Cart
 from models.user import User
 from services.auth.decorators import authorized_for
 
+from user import ctrl as user_ctrl
+
 
 class LocationController(Blueprint):
   """
@@ -33,6 +35,18 @@ class LocationController(Blueprint):
 
     return {"msg": "OK"}
 
+  def rssi(self, cart_ids, user_ctrl):
+    if len(cart_ids) > 0:
+      closest_cart = cart_ids[0]["cart_id"]
+      closest_cart_rssi = abs(cart_ids[0]["power"])
+      for cart in cart_ids:
+        if abs(cart["power"]) < closest_cart_rssi:
+          closest_cart = cart["cart_id"]
+          closest_cart_rssi = cart["power"]
+      return user_ctrl.takeCart(closest_cart, "rshaked")
+    else:
+      return None
+
   def _handleCartsNearEnclosure(self, user, cart_ids):
     """
     Updates state of given carts within range of Enclosure.
@@ -40,7 +54,8 @@ class LocationController(Blueprint):
     for cart_id in cart_ids:
         cart = self._fetchCart(cart_id)
 
-        if cart.rental_state == cart.RentalState.STOLEN or cart.rental_state == cart.RentalState.RENTED:
+        if (cart.rental_state == cart.RentalState.STOLEN or
+            cart.rental_state == cart.RentalState.RENTED):
           cart.rental_state = cart.RentalState.WAITING
           cart.enclosed = True
 
@@ -161,8 +176,9 @@ ctrl = LocationController("location", __name__, static_folder="../public")
 
 # User API paths.
 
-@ctrl.route("/api/location/nearby_carts", methods=["POST"])
-@authorized_for(role=Login.Role.USER)
+@ctrl.route("/api/location/nearby_carts/", methods=["POST"])
+# @authorized_for(role=Login.Role.USER)
 def nearby_carts():
-  res = ctrl.nearbyCarts(request.get_json().get("cart_ids"))
+  res = ctrl.nearbyCarts([cart["cart_id"] for cart in request.get_json().get("cart_ids")])
+  res = ctrl.rssi(request.get_json().get("cart_ids"), user_ctrl)
   return jsonify(**res)
