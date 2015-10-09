@@ -109,16 +109,22 @@ class LocationController(Blueprint):
     Updates state of given carts within range of Sentinel.
     """
     for cart_id in cart_ids:
-        cart = self._fetchCart(cart_id)
-        if cart.rental_state == cart.RentalState.STOLEN:
-          res_dict = {"msg": ("User '%s' found stolen cart '%s'" % (user.user_id, cart.cart_id)), "code": 6}
+      cart = self._fetchCart(cart_id)
+      if cart.rental_state == cart.RentalState.STOLEN:
+        res_dict = {"msg": ("User '%s' found stolen cart '%s'" % (user.user_id, cart.cart_id)), "code": 6}
 
-        elif cart.rental_state == cart.RentalState.WAITING:
-          cart.rental_state = cart.RentalState.ASSIGNED_IN_ENCLOSURE
-          res_dict = {"msg": ("Cart '%s' is now assigned to user '%s' and still in enclosure" %
-                              (user.user_id, cart.cart_id)), "code": 7}
+        cart.state_last_updated = datetime.datetime.now()
+        cart.last_seen_by = user
+        cart.save()
 
-        cart.state_last_updated = datetime.datetime.now
+        print res_dict # TODO - push notification
+
+      elif cart.rental_state == cart.RentalState.WAITING:
+        cart.rental_state = cart.RentalState.ASSIGNED_IN_ENCLOSURE
+        res_dict = {"msg": ("Cart '%s' is now assigned to user '%s' and still in enclosure" %
+                            (user.user_id, cart.cart_id)), "code": 7}
+
+        cart.state_last_updated = datetime.datetime.now()
         cart.last_seen_by = user
         cart.save()
 
