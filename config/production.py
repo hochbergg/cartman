@@ -31,7 +31,8 @@ TOKEN_ROLE_SETTINGS = {
 }
 
 # Cart renting settings.
-MAX_RENTING_DURATION = 60*60*6  # 6 hours.
+#MAX_RENTING_DURATION = 60*60*6  # 6 hours.
+MAX_RENTING_DURATION = 20  # 20 seconds.
 FINE_AMOUNT = 100  # 100$
 
 

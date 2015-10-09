@@ -8,8 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:layout_marginTop="80dp">
 
         <LinearLayout
@@ -31,7 +29,7 @@
                     android:text="3"
                     android:id="@+id/digit11"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true" />
             </FrameLayout>
@@ -48,7 +46,7 @@
                     android:text=":"
                     android:id="@+id/textView89"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true" />
             </FrameLayout>
@@ -65,7 +63,7 @@
                     android:text="3"
                     android:id="@+id/digit21"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true" />
             </FrameLayout>
@@ -82,7 +80,7 @@
                     android:text="3"
                     android:id="@+id/digit22"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true" />
             </FrameLayout>
@@ -99,7 +97,7 @@
                     android:text=":"
                     android:id="@+id/textView10"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true"
                     android:textIsSelectable="false" />
@@ -117,7 +115,7 @@
                     android:text="3"
                     android:id="@+id/digit31"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true" />
             </FrameLayout>
@@ -134,7 +132,7 @@
                     android:text="3"
                     android:id="@+id/digit32"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="90dp"
+                    android:textSize="70dp"
                     android:textColor="#000000"
                     android:linksClickable="true" />
             </FrameLayout>
@@ -205,17 +203,6 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView7"
-            android:src="@drawable/tiny_circle"
-            android:layout_margin="10dp"
-            android:minHeight="10dp"
-            android:minWidth="10dp"
-            android:maxHeight="10dp"
-            android:maxWidth="10dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/imageView8"
             android:src="@drawable/tiny_circle"
             android:layout_margin="10dp"
@@ -273,7 +260,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView5"
             android:src="@drawable/shopping_cart_icon"
-            android:layout_weight="1.1" />
+            android:layout_weight="1.1"
+            android:onClick="navigateToDone" />
 
     </LinearLayout>
 </LinearLayout>
