@@ -63,7 +63,7 @@ def seed_admins():
           urole=Login.Role.ADMIN)
   user1.login.save()
   user1.save()
-  user1.login.user = user1
+  user1.login.admin = user1
   user1.login.save()
 
 def seed_carts():
