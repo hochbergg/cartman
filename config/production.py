@@ -32,6 +32,7 @@ TOKEN_ROLE_SETTINGS = {
 
 # Cart renting settings.
 MAX_RENTING_DURATION = 60*60*6  # 6 hours.
+FINE_AMOUNT = 100  # 100$
 
 
 # PayPal Configuration - this is still SandBox

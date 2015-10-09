@@ -2,6 +2,7 @@ import datetime
 
 from flask import Blueprint, jsonify, request, g
 
+from lib.billing import fine_user
 from models.login import Login
 from models.cart import Cart
 from models.user import User
@@ -16,6 +17,15 @@ class LocationController(Blueprint):
 
   the _fetch* methods are for fetching data from the database.
   """
+  def register(self, app, options, first_registration=False):
+    """
+    Called when Blueprint is registered with the app on load.
+    """
+    self.fine_amount = app.config.get("FINE_AMOUNT")
+
+    super(UserController,
+          self).register(app, options, first_registration)
+
 
   def nearbyCarts(self, cart_ids):
     """
@@ -80,6 +90,9 @@ class LocationController(Blueprint):
 
         print res_dict # TODO - push notification
 
+        user.notifications.append(res_dict)
+        user.save()
+
   def _handleComplementingCartsNearEnclosure(self, user, cart_ids):
     """
     Updates state of all carts other than given list, assuming given list is of carts within range of Enclosure.
@@ -110,6 +123,8 @@ class LocationController(Blueprint):
       elif cart.rental_state == cart.RentalState.RENTED:
         if cart.max_renting_time and cart.renting_time > cart.max_renting_time:
           cart.rental_state.STOLEN # TODO differentiate between message with little time left to time past
+          if self.fine_amount > 0:
+            fine_user(user.username(), self.fine_amount)
 
           res_dict = {"msg": ("Cart '%s' has been stolen! User '%s' - you BASTARD!" %
                               (cart.cart_id, cart.renting_user)), "code": 4}
@@ -119,6 +134,9 @@ class LocationController(Blueprint):
       cart.save()
 
       print res_dict # TODO - push notification
+
+      user.notifications.append(res_dict)
+      user.save()
 
   def _handleCartsNearSentinel(self, user, cart_ids):
     """
@@ -145,6 +163,9 @@ class LocationController(Blueprint):
         cart.save()
 
         print res_dict # TODO - push notification
+
+        user.notifications.append(res_dict)
+        user.save()
 
   def _fetchCart(self, cart_id):
     """
