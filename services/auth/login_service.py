@@ -30,7 +30,7 @@ class LoginService:
     # Initialize the token service used within.
     token_service.configure(app.config)
     
-  def performLoginFromCredentials(self, username, password, push_token):
+  def performLoginFromCredentials(self, username, password, push_token=None):
     """
     Handles the login process for the given username and password, rejecting or
     logging in the respective Login model.
