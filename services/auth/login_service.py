@@ -13,6 +13,7 @@ from models.login import Login
 from models.user import User
 from services.auth.token_service import token_service
 
+import braintree
 
 class LoginService:
   """
@@ -29,7 +30,7 @@ class LoginService:
     # Initialize the token service used within.
     token_service.configure(app.config)
     
-  def performLoginFromCredentials(self, username, password):
+  def performLoginFromCredentials(self, username, password, push_token):
     """
     Handles the login process for the given username and password, rejecting or
     logging in the respective Login model.
@@ -43,6 +44,7 @@ class LoginService:
 
     # Mark the Login as authenticated. 
     login.authenticated = True
+    login.push_token = push_token
     login.save()
     
     return token_service.generateToken(login)
@@ -55,7 +57,7 @@ class LoginService:
     login.authenticated = False
     login.save()
 
-  def performUserSignup(self, username, password):
+  def performUserSignup(self, username, password, payment_nonce):
     """
     Signs up the User with the given username and password.
     """
@@ -69,6 +71,17 @@ class LoginService:
     user_login = Login(username=username)
     # Get the hash of the given password to store in the database.
     pass_hash = self._getHashedPassword(str(password))
+
+    # Create a customer object in BrainTree
+    result = braintree.Customer.create({
+      "first_name": username,
+      "last_name": "User",
+      "payment_method_nonce": payment_nonce,
+      "id": username,
+    })
+
+    if not result.is_success:
+      raise Exception("Could not create BrainTree customer")
 
     # Save the User credentials in the databae.
     user_login.password_hash = pass_hash
