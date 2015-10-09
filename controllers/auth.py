@@ -44,8 +44,7 @@ class AuthController(Blueprint):
 
         # Perform the login process itself.
         try:
-            token_data = login_service.performLoginFromCredentials(
-                    username, password, push_token=push_id)
+            token_data = login_service.performLoginFromCredentials(username, password, push_id)
         except Exception, e:
             return jsonify(err=str(e))
 

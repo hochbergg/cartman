@@ -23,7 +23,7 @@ class LocationController(Blueprint):
     """
     self.fine_amount = app.config.get("FINE_AMOUNT")
 
-    super(UserController,
+    super(LocationController,
           self).register(app, options, first_registration)
 
 
