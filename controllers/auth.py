@@ -136,13 +136,13 @@ def user_signup():
 def send_register():
     return file('register.html','rb').read() # TODO: Ugly, but fuck it
 
-from .billing import fine_user
+from lib.billing import fine_user
 @ctrl.route('/fine')
 def fine():
     fine_user(request.args.get('who'), 10)
     return "Fined"
 
-from .push import send_push
+from controllers.push import send_push
 @ctrl.route('/push')
 def push_it():
     send_push(request.args.get('to'), notification={'title':request.args.get('text')})
