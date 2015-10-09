@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class RequestURL {
     private static final String TAG = ".RequestURL";
-    private static final String HOME_URL = "http://e56ba303.ngrok.io";
+    private static final String HOME_URL = "http://cartman-server.herokuapp.com";
     private static final String URL_METHOD = "POST";
     private static String ACCESS_TOKEN;
 
