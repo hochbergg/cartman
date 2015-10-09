@@ -149,6 +149,7 @@ def submit_found_cart():
 @authorized_for(role=Login.Role.USER)
 def pull_notifications():
   res = ctrl.getPullNotifications()
+  print res
   return jsonify(**res)
 
 @ctrl.route("/api/user/push_notification/", methods=["POST"])
