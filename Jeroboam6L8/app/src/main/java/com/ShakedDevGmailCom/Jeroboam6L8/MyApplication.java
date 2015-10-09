@@ -25,12 +25,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class MyApplication extends Application {
     private static final String TAG = ".MyApplicationName";
-
+    private static final String BASE_URL = "http://357ba05c.ngrok.io";
     private BeaconManager beaconManager;
     private BeaconManager rangeBeaconManager;
     BroadcastReceiver myReceiver;
@@ -51,25 +53,9 @@ public class MyApplication extends Application {
                 sendBroadcast(intent);
                 showNotification("Enter notification", msg);
 
-
-                StrictMode.ThreadPolicy policy =
-                        new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-                Log.d(TAG, "App started up");
-                String urlStr = "http://f2d76353.ngrok.io";
-
-                try {
-
-
-                    URL url = new URL(urlStr);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-                    Log.i(TAG, reader.toString());
-
-                } catch (IOException e) {
-                    Log.i(TAG, "IO Exception");
-                }
+                String urlStr = BASE_URL + "?cardList=1,2,3&beacon=";
+                String urlMethod = "GET";
+                RequestURL.send(urlStr, urlMethod);
             }
 
             @Override
@@ -80,6 +66,11 @@ public class MyApplication extends Application {
                 intent.putExtra("Beacon Name", msg);
                 sendBroadcast(intent);
                 showNotification("Exit notification", msg);
+
+                String urlStr = BASE_URL + "?beacon=";
+                String urlMethod = "POST";
+                Map<String, String> parameters = new HashMap<String, String>();
+                RequestURL.send(urlStr, urlMethod);
             }
         });
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
