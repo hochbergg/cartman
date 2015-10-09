@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView3"
-            android:src="@drawable/cartblack" />
+            android:src="@drawable/cartblack"
+            android:onClick="navigateToRenting" />
     </FrameLayout>
 
     <FrameLayout
@@ -66,29 +67,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView5"
             android:src="@drawable/shopping_cart_icon"
-            android:layout_weight="1.5" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView6"
-            android:src="@drawable/tiny_circle"
-            android:layout_margin="10dp"
-            android:minHeight="10dp"
-            android:minWidth="10dp"
-            android:maxHeight="10dp"
-            android:maxWidth="10dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView7"
-            android:src="@drawable/tiny_circle"
-            android:layout_margin="10dp"
-            android:minHeight="10dp"
-            android:minWidth="10dp"
-            android:maxHeight="10dp"
-            android:maxWidth="10dp" />
+            android:layout_weight="1.5"
+            android:minHeight="20dp"
+            android:minWidth="20dp" />
 
         <ImageView
             android:layout_width="wrap_content"
