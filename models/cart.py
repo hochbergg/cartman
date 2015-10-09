@@ -12,6 +12,7 @@ class Cart(Document):
   cart_id = StringField(primary_key=True,
                          default=randomIdGenerator("C"))
 
+
   creation_time = DateTimeField(default=datetime.datetime.now)
 
   renting_user = GenericReferenceField()

@@ -2,9 +2,8 @@ DEBUG = True
 
 # Database settings.
 MONGODB_SETTINGS = {
-    "db": "cartman",
-    "host": "localhost",
-    "port": 27017,
+    "db": "heroku_nf6dqdm4",
+    "host": "mongodb://heroku_nf6dqdm4:mvgb4g2erhkmbd36ua98u1hmmq@ds033734.mongolab.com:33734/heroku_nf6dqdm4"
 }
 
 # Web URL settings.
@@ -25,6 +24,7 @@ TOKEN_ROLE_SETTINGS = {
 
 # Cart renting settings.
 MAX_RENTING_DURATION = 60  # 60 seconds.
+FINE_AMOUNT = 1  # 1$.
 
 
 # PayPal Configuration

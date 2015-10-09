@@ -2,12 +2,13 @@ import datetime
 
 from flask import Blueprint, jsonify, request, g
 
+from lib.billing import fine_user
 from models.login import Login
 from models.cart import Cart
 from models.user import User
 from services.auth.decorators import authorized_for
 
-from user import ctrl as user_ctrl
+from controllers.user import ctrl as user_ctrl
 
 
 class LocationController(Blueprint):
@@ -16,6 +17,15 @@ class LocationController(Blueprint):
 
   the _fetch* methods are for fetching data from the database.
   """
+  def register(self, app, options, first_registration=False):
+    """
+    Called when Blueprint is registered with the app on load.
+    """
+    self.fine_amount = app.config.get("FINE_AMOUNT")
+
+    super(UserController,
+          self).register(app, options, first_registration)
+
 
   def nearbyCarts(self, cart_ids):
     """
@@ -35,7 +45,7 @@ class LocationController(Blueprint):
 
     return {"msg": "OK"}
 
-  def rssi(self, cart_ids, user_ctrl):
+  def rssi(self, cart_ids):
     if len(cart_ids) > 0:
       closest_cart = cart_ids[0]["cart_id"]
       closest_cart_rssi = abs(cart_ids[0]["power"])
@@ -43,7 +53,8 @@ class LocationController(Blueprint):
         if abs(cart["power"]) < closest_cart_rssi:
           closest_cart = cart["cart_id"]
           closest_cart_rssi = cart["power"]
-      return user_ctrl.takeCart(closest_cart, "rshaked")
+      if closest_cart_rssi < 48:
+        return user_ctrl.takeCart(closest_cart)
     else:
       return None
 
@@ -79,6 +90,9 @@ class LocationController(Blueprint):
 
         print res_dict # TODO - push notification
 
+        user.notifications.append(res_dict)
+        user.save()
+
   def _handleComplementingCartsNearEnclosure(self, user, cart_ids):
     """
     Updates state of all carts other than given list, assuming given list is of carts within range of Enclosure.
@@ -109,6 +123,8 @@ class LocationController(Blueprint):
       elif cart.rental_state == cart.RentalState.RENTED:
         if cart.max_renting_time and cart.renting_time > cart.max_renting_time:
           cart.rental_state.STOLEN # TODO differentiate between message with little time left to time past
+          if self.fine_amount > 0:
+            fine_user(user.username(), self.fine_amount)
 
           res_dict = {"msg": ("Cart '%s' has been stolen! User '%s' - you BASTARD!" %
                               (cart.cart_id, cart.renting_user)), "code": 4}
@@ -118,6 +134,9 @@ class LocationController(Blueprint):
       cart.save()
 
       print res_dict # TODO - push notification
+
+      user.notifications.append(res_dict)
+      user.save()
 
   def _handleCartsNearSentinel(self, user, cart_ids):
     """
@@ -144,6 +163,9 @@ class LocationController(Blueprint):
         cart.save()
 
         print res_dict # TODO - push notification
+
+        user.notifications.append(res_dict)
+        user.save()
 
   def _fetchCart(self, cart_id):
     """
@@ -177,8 +199,8 @@ ctrl = LocationController("location", __name__, static_folder="../public")
 # User API paths.
 
 @ctrl.route("/api/location/nearby_carts/", methods=["POST"])
-# @authorized_for(role=Login.Role.USER)
+@authorized_for(role=Login.Role.USER)
 def nearby_carts():
-  res = ctrl.nearbyCarts([cart["cart_id"] for cart in request.get_json().get("cart_ids")])
-  res = ctrl.rssi(request.get_json().get("cart_ids"), user_ctrl)
-  return jsonify(**res)
+  res = ctrl.nearbyCarts([str(cart["cart_id"]) for cart in request.get_json().get("cart_ids")])
+  res = ctrl.rssi(request.get_json().get("cart_ids"))
+  return jsonify(res=res)

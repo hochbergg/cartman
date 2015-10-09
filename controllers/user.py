@@ -21,16 +21,13 @@ class UserController(Blueprint):
     super(UserController,
           self).register(app, options, first_registration)
 
-  def takeCart(self, cart_id, username):
+  def takeCart(self, cart_id):
     """
     Assigns given cart to current User.
     """
-    # user = g.user
-    # if not user:
-    #   return {"err": "User not found", "code": 1}
-
-    login = Login.objects(username=username).get()
-    user = login.user
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
 
     if user.cart:
       return {"err": "User already has a cart", "code": 2}
@@ -82,6 +79,33 @@ class UserController(Blueprint):
       return {"err": "User not found", "code": 1}
     return {"msg": "OK"}
 
+  def getPullNotifications(self):
+    """
+    Fetches all of the notifications for the User, and clears them.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+    
+    notifications = [dict(n) for n in user.notifications]
+    user.notifications.clear()
+    user.save()
+
+    return {"notifications": notifications}
+
+  def postPullNotification(self, notification):
+    """
+    Add a push notification to the User queue.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+
+    user.notifications.append(notification)
+    user.save()
+    
+    return { "msg": "OK" }
+
   def _fetchCart(self, cart_id):
     """
     Fetches cart by given ID.
@@ -113,4 +137,16 @@ def return_cart():
 @authorized_for(role=Login.Role.USER)
 def submit_found_cart():
   res = ctrl.submitFoundCart(request.get_json().get("cart_id"))
+  return jsonify(**res)
+
+@ctrl.route("/api/user/notifications/", methods=["POST"])
+@authorized_for(role=Login.Role.USER)
+def pull_notifications():
+  res = ctrl.getPullNotifications()
+  return jsonify(**res)
+
+@ctrl.route("/api/user/push_notification/", methods=["POST"])
+@authorized_for(role=Login.Role.USER)
+def push_notifications():
+  res = ctrl.postPullNotification(request.get_json().get("notification"))
   return jsonify(**res)
