@@ -11,6 +11,7 @@ from services.auth.login_service import login_service
 from controllers.auth import ctrl as auth_api_ctrl
 from controllers.user import ctrl as user_api_ctrl
 from controllers.admin import ctrl as admin_ctrl
+from controllers.location import ctrl as location_ctrl
 
 # Create and initialize the app.
 app = Flask(__name__, static_folder="public")
@@ -21,6 +22,7 @@ configure_app(app, db, login_service)
 app.register_blueprint(auth_api_ctrl)
 app.register_blueprint(user_api_ctrl)
 app.register_blueprint(admin_ctrl)
+app.register_blueprint(location_ctrl)
 
 @app.route('/')
 def hello():

@@ -1,9 +1,12 @@
 import os
 from datetime import datetime, timedelta
+import requests
+import json
 
 from flask import Blueprint, current_app, g, redirect, abort, jsonify, send_from_directory, request
 
 from models.event import Event
+from models.user import User
 from models.cart import Cart
 
 from controllers.user import UserController
@@ -22,16 +25,17 @@ ctrl = AdminController("admin", __name__,
                        static_folder=os.path.join(os.getcwd(), "public"))
 
 
-@ctrl.route("/admin/log/data/")
+@authorized_for(role=Login.Role.ADMIN)
+@ctrl.route("/api/admin/log/data/")
 def activity_log():
     event = Event(name='bla')
     event.save()
     events = Event.objects(
         creation_time__gte=(datetime.now() -
-                            timedelta(TIME_UNIT=TIME_MEASUREMENT)))
+                            timedelta(**{TIME_UNIT: TIME_MEASUREMENT})))
     return jsonify(title='events from the last {} {}'.format(
-                       TIME_MEASUREMENT, TIME_UNIT),
-                   msg=[event.toMinimalJson() for event in events])
+        TIME_MEASUREMENT, TIME_UNIT),
+        msg=[event.toMinimalJson() for event in events])
 
 
 @ctrl.route("/admin/")

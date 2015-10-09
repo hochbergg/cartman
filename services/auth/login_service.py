@@ -193,8 +193,8 @@ class LoginService:
     """
     try:
       return bcrypt.checkpw(plain_text_password, hashed_password)
-    except:
-      return None
+    except Exception, e:
+      raise e
 
   def _getHashedPassword(self, plain_text_password):
     """

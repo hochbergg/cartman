@@ -71,6 +71,8 @@ def seed_carts():
 
   for i in range(10):
     cart = Cart(cart_id=("C00000000000000%s" % i))
+    cart.rental_state = cart.RentalState.WAITING
+    cart.enclosed = True
     cart.save()
 
 def seed_all():
