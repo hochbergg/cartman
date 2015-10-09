@@ -21,16 +21,13 @@ class UserController(Blueprint):
     super(UserController,
           self).register(app, options, first_registration)
 
-  def takeCart(self, cart_id, username):
+  def takeCart(self, cart_id):
     """
     Assigns given cart to current User.
     """
-    # user = g.user
-    # if not user:
-    #   return {"err": "User not found", "code": 1}
-
-    login = Login.objects(username=username).get()
-    user = login.user
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
 
     if user.cart:
       return {"err": "User already has a cart", "code": 2}

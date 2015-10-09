@@ -8,7 +8,7 @@ from models.cart import Cart
 from models.user import User
 from services.auth.decorators import authorized_for
 
-from user import ctrl as user_ctrl
+from controllers.user import ctrl as user_ctrl
 
 
 class LocationController(Blueprint):
@@ -45,7 +45,7 @@ class LocationController(Blueprint):
 
     return {"msg": "OK"}
 
-  def rssi(self, cart_ids, user_ctrl):
+  def rssi(self, cart_ids):
     if len(cart_ids) > 0:
       closest_cart = cart_ids[0]["cart_id"]
       closest_cart_rssi = abs(cart_ids[0]["power"])
@@ -54,7 +54,7 @@ class LocationController(Blueprint):
           closest_cart = cart["cart_id"]
           closest_cart_rssi = cart["power"]
       if closest_cart_rssi < 48:
-        return user_ctrl.takeCart(closest_cart, "rshaked")
+        return user_ctrl.takeCart(closest_cart)
     else:
       return None
 
@@ -202,5 +202,5 @@ ctrl = LocationController("location", __name__, static_folder="../public")
 @authorized_for(role=Login.Role.USER)
 def nearby_carts():
   res = ctrl.nearbyCarts([str(cart["cart_id"]) for cart in request.get_json().get("cart_ids")])
-  res = ctrl.rssi(request.get_json().get("cart_ids"), user_ctrl)
+  res = ctrl.rssi(request.get_json().get("cart_ids"))
   return jsonify(res=res)
