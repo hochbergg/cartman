@@ -43,7 +43,8 @@ class LocationController(Blueprint):
         if abs(cart["power"]) < closest_cart_rssi:
           closest_cart = cart["cart_id"]
           closest_cart_rssi = cart["power"]
-      return user_ctrl.takeCart(closest_cart, "rshaked")
+      if closest_cart_rssi < 48:
+        return user_ctrl.takeCart(closest_cart, "rshaked")
     else:
       return None
 
@@ -177,8 +178,8 @@ ctrl = LocationController("location", __name__, static_folder="../public")
 # User API paths.
 
 @ctrl.route("/api/location/nearby_carts/", methods=["POST"])
-# @authorized_for(role=Login.Role.USER)
+@authorized_for(role=Login.Role.USER)
 def nearby_carts():
-  res = ctrl.nearbyCarts([cart["cart_id"] for cart in request.get_json().get("cart_ids")])
+  res = ctrl.nearbyCarts([str(cart["cart_id"]) for cart in request.get_json().get("cart_ids")])
   res = ctrl.rssi(request.get_json().get("cart_ids"), user_ctrl)
-  return jsonify(**res)
+  return jsonify(res=res)

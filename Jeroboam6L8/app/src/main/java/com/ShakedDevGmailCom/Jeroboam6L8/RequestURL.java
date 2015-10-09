@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import java.util.Map;
  */
 public class RequestURL {
     private static final String TAG = ".RequestURL";
-    private static final String HOME_URL = "http://7d640600.ngrok.io";
+    private static final String HOME_URL = "http://e56ba303.ngrok.io";
     private static final String URL_METHOD = "POST";
     private static String ACCESS_TOKEN;
 
@@ -40,13 +41,32 @@ public class RequestURL {
             urlConnection.setRequestMethod(URL_METHOD);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-            jsonToSend = jsonToSend.substring(0, jsonToSend.length() - 2);
+            jsonToSend = jsonToSend.substring(0, jsonToSend.length() - 1);
             jsonToSend += ",\"access_token\":\"" + ACCESS_TOKEN + "\"}";
             Log.i("JSONNNN : ", jsonToSend);
             out.writeBytes(jsonToSend);
             out.flush();
             out.close();
-            String responseMessage = urlConnection.getResponseMessage();
+            StringBuilder response  = new StringBuilder();
+            BufferedReader input = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()),8192);
+            String strLine = null;
+            while ((strLine = input.readLine()) != null)
+            {
+                response.append(strLine);
+            }
+            input.close();
+
+            //region Description
+            JSONObject mainResponseObject = null;
+            String responseMessage = null;
+            try {
+                mainResponseObject = new JSONObject(response.toString());
+                responseMessage = mainResponseObject.getString("access_token");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //endregion
+
 
 
             return responseMessage;
