@@ -11,13 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class RentingActivity extends AppCompatActivity {
+public class DoneActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_renting);
+        setContentView(R.layout.activity_done);
 
     }
 
@@ -54,8 +54,8 @@ public class RentingActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    public void navigateToDone(View view) {
-        Intent intent = new Intent(this, DoneActivity.class);
+    public void navigateToChoose(View view) {
+        Intent intent = new Intent(this, ChooseCartActivity.class);
         startActivity(intent);
     }
 }
