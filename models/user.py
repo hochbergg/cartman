@@ -23,6 +23,8 @@ class User(Document):
 
     cart = ReferenceField(Cart)
 
+    enclosure = BooleanField(default=False)
+
     def toMinimalJson(self):
         return {
             "userId": str(self.user_id),

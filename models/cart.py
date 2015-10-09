@@ -19,18 +19,16 @@ class Cart(Document):
   renting_user = GenericReferenceField()
   renting_time = DateTimeField()
   max_renting_time = DateTimeField()
+  enclosed = BooleanField()
+  rental_state = IntField()
+  state_last_updated = DateTimeField()
+  last_seen_by = GenericReferenceField()
 
-  class Status(Enum):
-    CAGED = 0
-    RENTED = 1
-    STOLEN = 2
-  
-  def status(self):
-    if not self.renting_user:
-      return self.Status.CAGED
-    if self.max_renting_time and self.renting_time > self.max_renting_time:
-      return self.Status.STOLEN
-    return self.status.RENTED
+  class RentalState(Enum):
+    WAITING = 0
+    ASSIGNED_IN_ENCLOSURE = 1
+    RENTED = 2
+    STOLEN = 3
 
   def toMinimalJson(self):
     return {
