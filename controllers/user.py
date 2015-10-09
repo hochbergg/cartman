@@ -96,6 +96,19 @@ class UserController(Blueprint):
 
     return {"notifications": notifications}
 
+  def postPullNotification(self, notification):
+    """
+    Add a push notification to the User queue.
+    """
+    user = g.user
+    if not user:
+      return {"err": "User not found", "code": 1}
+
+    user.notifications.append(notification)
+    user.save()
+    
+    return { "msg": "OK" }
+
   def _fetchCart(self, cart_id):
     """
     Fetches cart by given ID.
@@ -133,4 +146,10 @@ def submit_found_cart():
 @authorized_for(role=Login.Role.USER)
 def pull_notifications():
   res = ctrl.getPullNotifications()
+  return jsonify(**res)
+
+@ctrl.route("/api/user/push_notification/", methods=["POST"])
+@authorized_for(role=Login.Role.USER)
+def push_notifications():
+  res = ctrl.postPullNotification(request.get_json().get("notification"))
   return jsonify(**res)
