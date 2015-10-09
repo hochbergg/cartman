@@ -94,9 +94,10 @@ public class MonitorViewActivity extends AppCompatActivity {
                         cartsToViewStr = "No Carts Detected In My Area.";
                     }
                     else {
-                        String urlMethod = "POST";
-                        Log.i("HERE", cartsToURLStr);
-                        RequestURL.send(BASE_URL, urlMethod, cartsToURLStr);
+                        String cartsJSON = "{\"cart_ids\":[" + cartsToURLStr + "]}";
+                        Log.i("HERE. JSON:", cartsJSON);
+                        String path = "/api/location/nearby_carts";
+                        RequestURL.sendJSON(path, cartsJSON);
                     }
                     setCarts(cartsToViewStr);
                 } else {
@@ -111,6 +112,13 @@ public class MonitorViewActivity extends AppCompatActivity {
 
         region = new Region("ranged region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"), null, null);
+
+        String loginPath = "/auth/login/";
+        String loginJson = "{\"username\":\"tori\",\"password\":\"tori\"}";
+        String accessToken = RequestURL.sendJSON(loginPath, loginJson);
+        Log.i("ACCESS_TOKEN", accessToken);
+        RequestURL.setAccessToken(accessToken);
+
 
     }
 

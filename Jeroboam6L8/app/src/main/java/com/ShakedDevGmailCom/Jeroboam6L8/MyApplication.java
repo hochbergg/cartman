@@ -33,7 +33,6 @@ import java.util.UUID;
 
 public class MyApplication extends Application {
     private static final String TAG = ".MyApplicationName";
-    private static final String BASE_URL = "http://357ba05c.ngrok.io";
     private BeaconManager beaconManager;
     private BeaconManager rangeBeaconManager;
     BroadcastReceiver myReceiver;
@@ -52,9 +51,6 @@ public class MyApplication extends Application {
                 Intent intent = new Intent("com.hmkcode.android.USER_ACTION");
                 intent.putExtra("Beacon Name", msg);
 //                sendBroadcast(intent);
-                showNotification("Enter notification", msg);
-
-
             }
 
             @Override
@@ -64,8 +60,6 @@ public class MyApplication extends Application {
                 Intent intent = new Intent("com.hmkcode.android.USER_ACTION");
                 intent.putExtra("Beacon Name", msg);
 //                sendBroadcast(intent);
-                showNotification("Exit notification", msg);
-
             }
         });
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
@@ -99,24 +93,6 @@ public class MyApplication extends Application {
             }
         });
 
-    }
-
-    public void showNotification(String title, String message) {
-        Intent notifyIntent = new Intent(this, MainActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
-                new Intent[] { notifyIntent }, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .build();
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
     }
 
 }

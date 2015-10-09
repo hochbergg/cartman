@@ -25,51 +25,41 @@ import java.util.Map;
  */
 public class RequestURL {
     private static final String TAG = ".RequestURL";
+    private static final String HOME_URL = "http://7d640600.ngrok.io";
+    private static final String URL_METHOD = "POST";
+    private static String ACCESS_TOKEN;
 
-    public static void send(String urlStr, String urlMethod, String cartListStr) {
+    public static String sendJSON(String path, String jsonToSend) {
         StrictMode.ThreadPolicy policy =
                 new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         try {
-            URL url = new URL(urlStr);
+            URL url = new URL(HOME_URL + path);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod(urlMethod);
-            urlConnection.setRequestProperty("Content-Type","application/json");
+            urlConnection.setRequestMethod(URL_METHOD);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
             DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-            out.writeBytes("{\"cart_ids\":[" + cartListStr + "]}");
+            jsonToSend = jsonToSend.substring(0, jsonToSend.length() - 2);
+            jsonToSend += ",\"access_token\":\"" + ACCESS_TOKEN + "\"}";
+            Log.i("JSONNNN : ", jsonToSend);
+            out.writeBytes(jsonToSend);
             out.flush();
             out.close();
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+            String responseMessage = urlConnection.getResponseMessage();
 
 
-//            URL url;
-//            URLConnection urlConn;
-//            DataOutputStream printout;
-//            DataInputStream input;
-//            url = new URL (urlStr);
-//            urlConn = url.openConnection();
-//            urlConn.setDoInput (true);
-//            urlConn.setDoOutput (true);
-//            urlConn.setUseCaches (false);
-//            urlConn.setRequestProperty("Content-Type","application/json");
-//            urlConn.setRequestProperty("Host", "android.schoolportal.gr");
-//            urlConn.connect();
-//            //Create JSONObject here
-//            JSONObject jsonParam = new JSONObject();
-//            jsonParam.put("cart_ids", "[1,2,3,4]");
-//
-//            // Send POST output.
-//            printout = new DataOutputStream(urlConn.getOutputStream ());
-//            printout.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-//            printout.flush ();
-//            printout.close();
+            return responseMessage;
 
-//            Log.i(TAG, reader.toString());
 
         } catch (IOException e) {
             Log.i(TAG, "IO Exception");
         }
+
+        return "";
+    }
+
+    public static void setAccessToken(String newAccessToken) {
+        RequestURL.ACCESS_TOKEN = newAccessToken;
     }
 }
