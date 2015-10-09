@@ -1,5 +1,3 @@
-__author__ = 'shiriladelsky'
-
 import datetime
 
 from flufl.enum import Enum

@@ -8,6 +8,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.StrictMode;
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -17,12 +19,20 @@ import com.estimote.sdk.EstimoteSDK;
 import com.estimote.sdk.Region;
 
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class MyApplication extends Application {
     private static final String TAG = ".MyApplicationName";
-
+    private static final String BASE_URL = "http://357ba05c.ngrok.io";
     private BeaconManager beaconManager;
     private BeaconManager rangeBeaconManager;
     BroadcastReceiver myReceiver;
@@ -42,6 +52,10 @@ public class MyApplication extends Application {
                 intent.putExtra("Beacon Name", msg);
                 sendBroadcast(intent);
                 showNotification("Enter notification", msg);
+
+                String urlStr = BASE_URL + "?cardList=1,2,3&beacon=";
+                String urlMethod = "GET";
+                RequestURL.send(urlStr, urlMethod);
             }
 
             @Override
@@ -52,6 +66,11 @@ public class MyApplication extends Application {
                 intent.putExtra("Beacon Name", msg);
                 sendBroadcast(intent);
                 showNotification("Exit notification", msg);
+
+                String urlStr = BASE_URL + "?beacon=";
+                String urlMethod = "POST";
+                Map<String, String> parameters = new HashMap<String, String>();
+                RequestURL.send(urlStr, urlMethod);
             }
         });
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
