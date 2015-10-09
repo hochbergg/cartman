@@ -8,10 +8,10 @@
     <string name="choose_cart_title">Go ahead,\nchoose a cart</string>
     <string name="choose_cart_description">Just take your phone and touch\nyour chosen cart to get started</string>
     <string name="accept_cart_title">Ready to go!\n</string>
-    <string name="accept_cart_desription">You've chosen cart #123\nYou'll have 3hrs to use it!</string>
+    <string name="accept_cart_desription">You\'ve chosen cart #123\nYou\'ll have 3hrs to use it!</string>
     <string name="renting_title">Enjoy your shopping!\n</string>
-    <string name="renting_description">When you're done, please return the\ncart to the enclosure to finish</string>
-    <string name="screw_you_guys">screw you guys\ni'm going home</string>
+    <string name="renting_description">When you\'re done, please return the\ncart to the enclosure to finish</string>
+    <string name="screw_you_guys">screw you guys\ni\'m going home</string>
     <string name="done_title">Enjoy your shopping!\n</string>
     <string name="done_description">Now that your shopping\nexperience is complete, we look\nforward to seeing you as part of\nour bounty program!</string>
     screw you guys

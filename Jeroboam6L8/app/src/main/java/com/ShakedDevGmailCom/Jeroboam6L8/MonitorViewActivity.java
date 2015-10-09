@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class MonitorViewActivity extends AppCompatActivity {
 
-    private static final String BASE_URL = "http://4f997bd2.ngrok.io/api/user/take_cart/";
+    private static final String BASE_URL = "http://4f997bd2.ngrok.io/api/location/nearby_carts/";
 
     private static final Map<String, String> CARTS_BY_BEACONS;
 
@@ -82,11 +82,13 @@ public class MonitorViewActivity extends AppCompatActivity {
                         if (CARTS_BY_BEACONS.get(cartId) != null) {
 
                             cartsToViewStr += (CARTS_BY_BEACONS.get(cartId)) + "\n";
-                            cartsToURLStr += cartId.replace(":","") + ",";
+                            cartId = cartId.replace(":", "");
+                            String cartPowerStr = String.valueOf(beacon.getRssi());
+                            cartsToURLStr += "{\"cart_id\":" + cartId + ",\"power\":" + cartPowerStr + "},";
                         }
                     }
                     if (cartsToURLStr.length() > 0) {
-                        cartsToURLStr = cartsToURLStr.substring(0, cartsToURLStr.length() - 2);
+                        cartsToURLStr = cartsToURLStr.substring(0, cartsToURLStr.length() - 1);
                     }
                     if (cartsToViewStr.equals("")) {
                         cartsToViewStr = "No Carts Detected In My Area.";

@@ -37,7 +37,7 @@ public class RequestURL {
             urlConnection.setRequestMethod(urlMethod);
             urlConnection.setRequestProperty("Content-Type","application/json");
             DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-            out.writeBytes("\n{\"cart_id\":[" + cartListStr + "]}");
+            out.writeBytes("{\"cart_ids\":[" + cartListStr + "]}");
             out.flush();
             out.close();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());

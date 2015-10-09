@@ -89,6 +89,6 @@ public class ServerRequestsHandler extends IntentService {
      * parameters.
      */
     private void handleActionSendCart(String urlStr, String urlMethod, String carts) {
-        RequestURL.send(urlStr, urlMethod);
+//        RequestURL.send(urlStr, urlMethod);
     }
 }
