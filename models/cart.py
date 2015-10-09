@@ -32,7 +32,7 @@ class Cart(Document):
     return {
         "cartId": str(self.cart_id),
         "userId": self.user.user_id if self.user else None,
-        "status": str(self.status().name),
+        "status": str(self.RentalState(self.rental_state).name),
       }
 
   def toFullJson(self):

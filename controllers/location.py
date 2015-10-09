@@ -40,7 +40,8 @@ class LocationController(Blueprint):
     for cart_id in cart_ids:
         cart = self._fetchCart(cart_id)
 
-        if cart.rental_state == cart.RentalState.STOLEN or cart.rental_state == cart.RentalState.RENTED:
+        if (cart.rental_state == cart.RentalState.STOLEN or
+            cart.rental_state == cart.RentalState.RENTED):
           cart.rental_state = cart.RentalState.WAITING
           cart.enclosed = True
 
