@@ -44,6 +44,9 @@ class UserController(Blueprint):
                              if self.max_renting_duration else None)
     cart.save()
 
+    user.notifications.append({"name": "CART_TAKEN", "cart_id": cart.cart_id})
+    user.save()
+
     return {"msg": "OK"}
 
   def returnCart(self, cart_id):
@@ -67,6 +70,9 @@ class UserController(Blueprint):
     cart.renting_time = None
     cart.max_renting_time = None
     cart.save()
+
+    user.notifications.append({"name": "CART_RETURNED", "cart_id": cart.cart_id})
+    user.save()
 
     return {"msg": "OK"}
 
