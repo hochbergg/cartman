@@ -93,11 +93,14 @@ class UserController(Blueprint):
     if not user:
       return {"err": "User not found", "code": 1}
     
-    notifications = [dict(n) for n in user.notifications]
-    user.notifications.clear()
+    if not user.notifications:
+      return {"notifications": None}
+
+    notification = dict(user.notifications[0])
+    user.notifications = user.notifications[1:]
     user.save()
 
-    return {"notifications": notifications}
+    return {"notifications": notification}
 
   def postPullNotification(self, notification):
     """
